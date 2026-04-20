@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Tavoli.h"
-#include "Utils.h"
+#include "tavoli.h"
+#include "utils.h"
 
 void inizializzaCatalogoTavoli(CatalogoTavoli *catalogo) {
     catalogo->elementi = NULL;

@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include "tavoli.h"
-#include "clienti.h"
-#include "prenotazioni.h"
-#include "file_io.h"
-#include "utils.h"
+#include "include/tavoli.h"
+#include "include/clienti.h"
+#include "include/prenotazioni.h"
+#include "include/file_io.h"
+#include "include/utils.h"
 
 void menuTavoli(CatalogoTavoli *catalogo) {
     int scelta;

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "Prenotazioni.h"
-#include "Utils.h"
+#include "prenotazioni.h"
+#include "utils.h"
 
 void inizializzaArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
     archivio->elementi = NULL;

@@ -1,6 +1,9 @@
-#include "Tavoli.h"
-#include "Clienti.h"
-#include "Prenotazioni.h"
+#ifndef FILE_IO_H
+#define FILE_IO_H
+
+#include "tavoli.h"
+#include "clienti.h"
+#include "prenotazioni.h"
 
 void salvaTavoli(CatalogoTavoli *catalogo);
 void salvaClienti(ElencoClienti *elenco);
@@ -12,3 +15,5 @@ void caricaClienti(ElencoClienti *elenco);
 void caricaPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco);
 
 void salvaTutto(CatalogoTavoli *catalogo, ElencoClienti *elenco, ArchivioPrenotazioni *archivio);
+
+#endif

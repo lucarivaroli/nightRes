@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Clienti.h"
-#include "Utils.h"
+#include "clienti.h"
+#include "utils.h"
 
 void inizializzaElencoClienti(ElencoClienti *elenco) {
     elenco->elementi = NULL;

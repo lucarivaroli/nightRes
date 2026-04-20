@@ -1,4 +1,7 @@
-#include "Tavoli.h"
+#ifndef CLIENTI_H
+#define CLIENTI_H
+
+#include "tavoli.h"
 
 struct Prenotazione;
 
@@ -34,3 +37,5 @@ void visualizzaStoricoCliente(ElencoClienti *elenco);
 void aggiungiPrenotazioneACliente(Cliente *cliente, struct Prenotazione *prenotazione);
 
 void liberaElencoClienti(ElencoClienti *elenco);
+
+#endif

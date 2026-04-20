@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "Utils.h"
+#include "utils.h"
 
 void pulisciInput() {
     int carattere;

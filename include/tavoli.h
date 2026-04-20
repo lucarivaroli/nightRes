@@ -1,3 +1,6 @@
+#ifndef TAVOLI_H
+#define TAVOLI_H
+
 #define MAX_STR 100
 
 typedef struct {
@@ -29,3 +32,5 @@ void visualizzaTavoli(CatalogoTavoli *catalogo);
 void visualizzaMappaTavoli(CatalogoTavoli *catalogo);
 
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo);
+
+#endif

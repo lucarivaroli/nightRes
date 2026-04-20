@@ -1,6 +1,9 @@
+#ifndef PRENOTAZIONI_H
+#define PRENOTAZIONI_H
+
 #include <time.h>
-#include "Clienti.h"
-#include "Tavoli.h"
+#include "tavoli.h"
+#include "clienti.h"
 
 typedef struct Prenotazione {
     int id;
@@ -53,3 +56,5 @@ void assegnaPrimoDellaCoda(ArchivioPrenotazioni *archivio, Tavolo *tavoloLiberat
 
 void liberaArchivioPrenotazioni(ArchivioPrenotazioni *archivio);
 void liberaCodaAttesa(CodaAttesa *coda);
+
+#endif
