@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Avvia NightRes",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "gcc src/MAIN.c src/Clienti.c src/File_io.c src/Prenotazioni.c src/Tavoli.c src/Utils.c -Iinclude -o nightres && ./nightres",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
