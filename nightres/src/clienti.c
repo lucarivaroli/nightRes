@@ -7,7 +7,7 @@ void inizializzaElencoClienti(ElencoClienti *elenco) {
     elenco->elementi = NULL;
     elenco->numeroElementi = 0;
     elenco->capacita = 0;
-    elenco->prossimoId = 1;
+    elenco->prossimoId = 1;// ID univoco per ogni cliente, incrementato ad ogni aggiunta
 }
 
 void espandiElencoClienti(ElencoClienti *elenco) {
