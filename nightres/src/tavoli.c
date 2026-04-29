@@ -8,10 +8,10 @@ void inizializzaCatalogoTavoli(CatalogoTavoli *catalogo) {
     catalogo->elementi = NULL;
     catalogo->numeroElementi = 0;
     catalogo->capacita = 0;
-    catalogo->prossimoId = 1;
+    catalogo->prossimoId = 1;// ID univoco per ogni tavolo, incrementato ad ogni aggiunta
 }
 
-void espandiCatalogoTavoli(CatalogoTavoli *catalogo) {
+void espandiCatalogoTavoli(CatalogoTavoli *catalogo) {// Espande la capacità del catalogo se necessario
     if (catalogo->numeroElementi >= catalogo->capacita) {
         if (catalogo->capacita == 0) {
             catalogo->capacita = 10;
@@ -41,8 +41,11 @@ void aggiungiTavolo(CatalogoTavoli *catalogo) {
     scanf("%d", &tavolo->numeroTavolo);
     pulisciInput();
 
-    leggiStringa("Nome tavolo: ", tavolo->nomeTavolo, sizeof(tavolo->nomeTavolo));
-    leggiStringa("Zona (VIP, dancefloor, lounge, esterno): ", tavolo->zona, sizeof(tavolo->zona));
+    printf("Nome tavolo: ");
+    scanf(" %[^\n]", tavolo->nomeTavolo);
+
+    printf("Zona(VIP, dancefloor, lounge, esterno): ");
+    scanf(" %[^\n]", tavolo->zona);
 
     printf("Capienza: ");
     scanf("%d", &tavolo->capienza);
@@ -76,10 +79,15 @@ void modificaTavolo(CatalogoTavoli *catalogo) {
 
     printf("Nuovo numero tavolo: ");
     scanf("%d", &tavolo->numeroTavolo);
-    pulisciInput();
+    
 
-    leggiStringa("Nuovo nome tavolo: ", tavolo->nomeTavolo, sizeof(tavolo->nomeTavolo));
-    leggiStringa("Nuova zona: ", tavolo->zona, sizeof(tavolo->zona));
+    printf("Nuovo nome tavolo: ");
+    scanf(" %[^\n]", tavolo->nomeTavolo);
+    
+
+    printf("Nuova zona: ");
+    scanf(" %[^\n]", tavolo->zona);
+    
 
     printf("Nuova capienza: ");
     scanf("%d", &tavolo->capienza);
@@ -116,7 +124,9 @@ void cercaTavoli(CatalogoTavoli *catalogo) {
     float prezzoMinimo;
     int i;
 
-    leggiStringa("Zona da cercare: ", zona, sizeof(zona));
+    printf("Zona da cercare: ");
+    scanf(" %[^\n]", zona);
+    pulisciInput();
 
     printf("Capienza minima: ");
     scanf("%d", &capienzaMinima);
@@ -129,13 +139,8 @@ void cercaTavoli(CatalogoTavoli *catalogo) {
     for (i = 0; i < catalogo->numeroElementi; i++) {
         Tavolo *tavolo = catalogo->elementi[i];
 
-        if (tavolo->attivo == 1 &&
-            strstr(tavolo->zona, zona) != NULL &&
-            tavolo->capienza >= capienzaMinima &&
-            tavolo->prezzoMinimo >= prezzoMinimo) {
-            printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f\n",
-                   tavolo->id, tavolo->numeroTavolo, tavolo->nomeTavolo,
-                   tavolo->zona, tavolo->capienza, tavolo->prezzoMinimo);
+        if (tavolo->attivo == 1 && strstr(tavolo->zona, zona) != NULL && tavolo->capienza >= capienzaMinima && tavolo->prezzoMinimo >= prezzoMinimo) {
+            printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f\n",tavolo->id, tavolo->numeroTavolo, tavolo->nomeTavolo,tavolo->zona, tavolo->capienza, tavolo->prezzoMinimo);
         }
     }
 }
@@ -148,36 +153,28 @@ void visualizzaTavoli(CatalogoTavoli *catalogo) {
     printf("\n--- TAVOLI ---\n");
     for (i = 0; i < catalogo->numeroElementi; i++) {
         Tavolo *tavolo = catalogo->elementi[i];
-        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | %s\n",
-               tavolo->id,
-               tavolo->numeroTavolo,
-               tavolo->nomeTavolo,
-               tavolo->zona,
-               tavolo->capienza,
-               tavolo->prezzoMinimo,
-               tavolo->attivo ? "Attivo" : "Disattivo");
-    }
-}
-
-void visualizzaMappaTavoli(CatalogoTavoli *catalogo) {
-    int i;
-    int colonne = 4;
-
-    ordinaTavoliPerNumero(catalogo);
-
-    printf("\n========= MAPPA TAVOLI =========\n\n");
-
-    for (i = 0; i < catalogo->numeroElementi; i++) {
-        Tavolo *tavolo = catalogo->elementi[i];
-        printf("[T%-2d %-1s] ", tavolo->numeroTavolo, tavolo->attivo ? "A" : "X");
-
-        if ((i + 1) % colonne == 0) {
-            printf("\n");
+        if (tavolo->attivo == 1) {
+        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Attivo\n",
+            tavolo->id,
+            tavolo->numeroTavolo,
+            tavolo->nomeTavolo,
+            tavolo->zona,
+            tavolo->capienza,
+            tavolo->prezzoMinimo);
+    } else {
+        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Disattivo\n",
+            tavolo->id,
+            tavolo->numeroTavolo,
+            tavolo->nomeTavolo,
+            tavolo->zona,
+            tavolo->capienza,
+            tavolo->prezzoMinimo);
         }
     }
-
-    printf("\n\nLegenda: A = attivo, X = disattivo\n");
+        
+    
 }
+
 
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo) {
     int i;

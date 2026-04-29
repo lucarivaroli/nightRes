@@ -29,7 +29,7 @@ void modificaTavolo(CatalogoTavoli *catalogo);
 void eliminaTavolo(CatalogoTavoli *catalogo);
 void cercaTavoli(CatalogoTavoli *catalogo);
 void visualizzaTavoli(CatalogoTavoli *catalogo);
-void visualizzaMappaTavoli(CatalogoTavoli *catalogo);
+
 
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo);
 

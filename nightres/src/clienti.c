@@ -38,9 +38,16 @@ void aggiungiCliente(ElencoClienti *elenco) {
     cliente->id = elenco->prossimoId++;
     cliente->prenotazioni = NULL;
 
-    leggiStringa("Nome cliente: ", cliente->nome, sizeof(cliente->nome));
-    leggiStringa("Telefono: ", cliente->telefono, sizeof(cliente->telefono));
-    leggiStringa("Livello fedelta' (standard, gold, VIP): ", cliente->livelloFedelta, sizeof(cliente->livelloFedelta));
+    printf("Nome cliente: ");
+    scanf(" %[^\n]", cliente->nome);
+
+    printf("Telefono: ");
+    scanf(" %[^\n]", cliente->telefono);
+    
+
+    printf("Livello fedeltà (bronze, silver, gold): ");
+    scanf(" %[^\n]", cliente->livelloFedelta);
+    
 
     espandiElencoClienti(elenco);
     elenco->elementi[elenco->numeroElementi++] = cliente;
@@ -85,8 +92,7 @@ void visualizzaClienti(ElencoClienti *elenco) {
     printf("\n--- CLIENTI ---\n");
     for (i = 0; i < elenco->numeroElementi; i++) {
         Cliente *cliente = elenco->elementi[i];
-        printf("ID:%d | Nome:%s | Telefono:%s | Livello:%s\n",
-               cliente->id, cliente->nome, cliente->telefono, cliente->livelloFedelta);
+        printf("ID:%d | Nome:%s | Telefono:%s | Livello:%s\n",cliente->id, cliente->nome, cliente->telefono, cliente->livelloFedelta);
     }
 }
 
@@ -129,14 +135,23 @@ void visualizzaStoricoCliente(ElencoClienti *elenco) {
     }
 
     while (corrente != NULL) {
-        printf("Prenotazione ID:%d | Tavolo:%d | Fascia:%s | Stato:%s | Caparra:%.2f\n",
+        if (corrente->prenotazione->tavolo != NULL) {
+            printf("Prenotazione ID:%d | Tavolo:%d | Fascia:%s | Stato:%s | Caparra:%.2f\n",
                corrente->prenotazione->id,
-               corrente->prenotazione->tavolo ? corrente->prenotazione->tavolo->numeroTavolo : -1,
+               corrente->prenotazione->tavolo->numeroTavolo,
                corrente->prenotazione->fasciaOraria,
                corrente->prenotazione->stato,
                corrente->prenotazione->caparra);
-        corrente = corrente->successivo;
+    } else {
+            printf("Prenotazione ID:%d | Tavolo:non assegnato | Fascia:%s | Stato:%s | Caparra:%.2f\n",
+               corrente->prenotazione->id,
+               corrente->prenotazione->fasciaOraria,
+               corrente->prenotazione->stato,
+               corrente->prenotazione->caparra);
     }
+
+    corrente = corrente->successivo;
+}
 }
 
 void liberaElencoClienti(ElencoClienti *elenco) {

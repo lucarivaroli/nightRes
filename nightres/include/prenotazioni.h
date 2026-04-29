@@ -45,7 +45,7 @@ void inserisciInCoda(CodaAttesa *coda, Cliente *cliente, const char *fasciaOrari
 NodoCoda *estraiDallaCoda(CodaAttesa *coda);
 void visualizzaCodaAttesa(CodaAttesa *coda);
 
-time_t creaOrarioTurno(const char *fasciaOraria);
+time_t creaOrarioTurno(const char *fasciaOraria);// Converte una fascia oraria in un timestamp per il turno
 int tavoloOccupatoInFascia(ArchivioPrenotazioni *archivio, int idTavolo, const char *fasciaOraria);
 
 void creaPrenotazione(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco, CodaAttesa *coda);

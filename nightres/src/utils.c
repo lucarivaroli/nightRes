@@ -9,12 +9,6 @@ void pulisciInput() {
     }
 }
 
-void leggiStringa(const char *messaggio, char *destinazione, int dimensione) {
-    printf("%s", messaggio);
-    if (fgets(destinazione, dimensione, stdin) != NULL) {
-        destinazione[strcspn(destinazione, "\n")] = '\0';
-    }
-}
 
 void stampaDataOra(time_t valoreTempo) {
     char buffer[64];
@@ -23,8 +17,8 @@ void stampaDataOra(time_t valoreTempo) {
     printf("%s", buffer);
 }
 
-void stampaBarra(int valore, int massimo) {
-    int numeroBarre;
+void stampaBarra(int valore, int massimo) { // Stampa una barra di progresso testuale proporzionale al valore rispetto al massimo
+    int numeroBarre;                        //funzione che serve dopo per mostrare le statistiche 
     int i;
 
     if (massimo <= 0) {
@@ -43,6 +37,7 @@ void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
     int i, j;
     Tavolo *temp;
 
+    //bubble sort per ordinare i tavoli in base al numero del tavolo
     for (i = 0; i < catalogo->numeroElementi - 1; i++) {
         for (j = 0; j < catalogo->numeroElementi - i - 1; j++) {
             if (catalogo->elementi[j]->numeroTavolo > catalogo->elementi[j + 1]->numeroTavolo) {

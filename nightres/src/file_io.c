@@ -13,14 +13,7 @@ void salvaTavoli(CatalogoTavoli *catalogo) {
 
     for (i = 0; i < catalogo->numeroElementi; i++) {
         Tavolo *tavolo = catalogo->elementi[i];
-        fprintf(file, "%d,%d,%s,%s,%d,%.2f,%d\n",
-                tavolo->id,
-                tavolo->numeroTavolo,
-                tavolo->nomeTavolo,
-                tavolo->zona,
-                tavolo->capienza,
-                tavolo->prezzoMinimo,
-                tavolo->attivo);
+        fprintf(file, "%d,%d,%s,%s,%d,%.2f,%d\n",tavolo->id,tavolo->numeroTavolo,tavolo->nomeTavolo,tavolo->zona,tavolo->capienza,tavolo->prezzoMinimo,tavolo->attivo);
     }
 
     fclose(file);
@@ -36,11 +29,7 @@ void salvaClienti(ElencoClienti *elenco) {
 
     for (i = 0; i < elenco->numeroElementi; i++) {
         Cliente *cliente = elenco->elementi[i];
-        fprintf(file, "%d,%s,%s,%s\n",
-                cliente->id,
-                cliente->nome,
-                cliente->telefono,
-                cliente->livelloFedelta);
+        fprintf(file, "%d,%s,%s,%s\n",cliente->id,cliente->nome,cliente->telefono,cliente->livelloFedelta);
     }
 
     fclose(file);
@@ -48,25 +37,37 @@ void salvaClienti(ElencoClienti *elenco) {
 
 void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
     FILE *file = fopen("data/prenotazioni.csv", "w");
-    int i;
+    int i, idTavolo, idCliente;
 
     if (file == NULL) {
         return;
     }
 
     for (i = 0; i < archivio->numeroElementi; i++) {
-        Prenotazione *prenotazione = archivio->elementi[i];
-        fprintf(file, "%d,%d,%d,%s,%.2f,%s,%lld,%lld,%lld\n",
-                prenotazione->id,
-                prenotazione->tavolo ? prenotazione->tavolo->id : -1,
-                prenotazione->cliente ? prenotazione->cliente->id : -1,
-                prenotazione->fasciaOraria,
-                prenotazione->caparra,
-                prenotazione->stato,
-                (long long)prenotazione->creazione,
-                (long long)prenotazione->inizioTurno,
-                (long long)prenotazione->scadenzaNoShow);
+
+    Prenotazione *prenotazione = archivio->elementi[i];
+
+    if (prenotazione->tavolo != NULL) {
+        idTavolo = prenotazione->tavolo->id;
+    } else {
+        idTavolo = -1;// Valore speciale per indicare nessun tavolo associato
     }
+
+    if (prenotazione->cliente != NULL) {
+        idCliente = prenotazione->cliente->id;
+    } else {
+        idCliente = -1;// Valore speciale per indicare nessun cliente associato
+    }
+
+    fprintf(file, "%d,%d,%d,%s,%.2f,%s,%lld,%lld,%lld\n",prenotazione->id,idTavolo,idCliente,prenotazione->fasciaOraria,
+            prenotazione->caparra,
+            prenotazione->stato,
+            (long long)prenotazione->creazione,
+            (long long)prenotazione->inizioTurno,
+            (long long)prenotazione->scadenzaNoShow);
+}
+
+  
 
     fclose(file);
 }
@@ -102,56 +103,24 @@ void caricaTavoli(CatalogoTavoli *catalogo) {
     }
 
     while (fgets(riga, sizeof(riga), file) != NULL) {
+
         Tavolo *tavolo = malloc(sizeof(Tavolo));
-        char *token = strtok(riga, ",");
 
-        if (token == NULL) {
+        int letti = sscanf(riga,
+            "%d,%d,%49[^,],%29[^,],%d,%f,%d",       //sscanf: legge un intero, un intero, una stringa fino a 49 caratteri o fino a virgola, una stringa fino a 29 caratteri o fino a virgola, un intero, un float, un intero
+            &tavolo->id,
+            &tavolo->numeroTavolo,
+            tavolo->nomeTavolo,
+            tavolo->zona,
+            &tavolo->capienza,
+            &tavolo->prezzoMinimo,
+            &tavolo->attivo
+        );
+
+        if (letti != 7) {       // Controlla se sono stati letti tutti i campi necessari
             free(tavolo);
             continue;
         }
-        tavolo->id = atoi(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(tavolo);
-            continue;
-        }
-        tavolo->numeroTavolo = atoi(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(tavolo);
-            continue;
-        }
-        strcpy(tavolo->nomeTavolo, token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(tavolo);
-            continue;
-        }
-        strcpy(tavolo->zona, token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(tavolo);
-            continue;
-        }
-        tavolo->capienza = atoi(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(tavolo);
-            continue;
-        }
-        tavolo->prezzoMinimo = (float)atof(token);
-
-        token = strtok(NULL, ",\n");
-        if (token == NULL) {
-            free(tavolo);
-            continue;
-        }
-        tavolo->attivo = atoi(token);
 
         espandiCatalogoTavoli(catalogo);
         catalogo->elementi[catalogo->numeroElementi++] = tavolo;
@@ -173,35 +142,22 @@ void caricaClienti(ElencoClienti *elenco) {
     }
 
     while (fgets(riga, sizeof(riga), file) != NULL) {
+
         Cliente *cliente = malloc(sizeof(Cliente));
-        char *token = strtok(riga, ",");
 
-        if (token == NULL) {
+        int letti = sscanf(riga,
+            "%d,%99[^,],%29[^,],%19[^\n]",
+            &cliente->id,
+            cliente->nome,
+            cliente->telefono,
+            cliente->livelloFedelta
+        );
+
+        if (letti != 4) {
             free(cliente);
             continue;
         }
-        cliente->id = atoi(token);
 
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(cliente);
-            continue;
-        }
-        strcpy(cliente->nome, token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(cliente);
-            continue;
-        }
-        strcpy(cliente->telefono, token);
-
-        token = strtok(NULL, ",\n");
-        if (token == NULL) {
-            free(cliente);
-            continue;
-        }
-        strcpy(cliente->livelloFedelta, token);
         cliente->prenotazioni = NULL;
 
         espandiElencoClienti(elenco);
@@ -224,72 +180,36 @@ void caricaPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo
     }
 
     while (fgets(riga, sizeof(riga), file) != NULL) {
+
         Prenotazione *prenotazione = malloc(sizeof(Prenotazione));
+
         int idTavolo;
         int idCliente;
-        char *token = strtok(riga, ",");
+        long long creazione;
+        long long inizioTurno;
+        long long scadenzaNoShow;
 
-        if (token == NULL) {
+        int letti = sscanf(riga,
+            "%d,%d,%d,%19[^,],%f,%19[^,],%lld,%lld,%lld",
+            &prenotazione->id,
+            &idTavolo,
+            &idCliente,
+            prenotazione->fasciaOraria,
+            &prenotazione->caparra,
+            prenotazione->stato,
+            &creazione,
+            &inizioTurno,
+            &scadenzaNoShow
+        );
+
+        if (letti != 9) {
             free(prenotazione);
             continue;
         }
-        prenotazione->id = atoi(token);
 
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        idTavolo = atoi(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        idCliente = atoi(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        strcpy(prenotazione->fasciaOraria, token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        prenotazione->caparra = (float)atof(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        strcpy(prenotazione->stato, token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        prenotazione->creazione = (time_t)atoll(token);
-
-        token = strtok(NULL, ",");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        prenotazione->inizioTurno = (time_t)atoll(token);
-
-        token = strtok(NULL, ",\n");
-        if (token == NULL) {
-            free(prenotazione);
-            continue;
-        }
-        prenotazione->scadenzaNoShow = (time_t)atoll(token);
+        prenotazione->creazione = (time_t)creazione;
+        prenotazione->inizioTurno = (time_t)inizioTurno;
+        prenotazione->scadenzaNoShow = (time_t)scadenzaNoShow;
 
         prenotazione->tavolo = trovaTavoloPerId(catalogo, idTavolo);
         prenotazione->cliente = trovaClientePerId(elenco, idCliente);

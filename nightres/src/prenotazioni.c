@@ -95,7 +95,7 @@ void visualizzaCodaAttesa(CodaAttesa *coda) {
     }
 }
 
-static int oraPerFascia(const char *fasciaOraria) {
+int oraPerFascia(const char *fasciaOraria) {
     if (strcmp(fasciaOraria, "apertura") == 0) {
         return 22;
     }
@@ -126,11 +126,8 @@ int tavoloOccupatoInFascia(ArchivioPrenotazioni *archivio, int idTavolo, const c
     for (i = 0; i < archivio->numeroElementi; i++) {
         Prenotazione *prenotazione = archivio->elementi[i];
 
-        if (prenotazione->tavolo != NULL &&
-            prenotazione->tavolo->id == idTavolo &&
-            strcmp(prenotazione->fasciaOraria, fasciaOraria) == 0 &&
-            (strcmp(prenotazione->stato, "attiva") == 0 ||
-             strcmp(prenotazione->stato, "confermata") == 0)) {
+        if (prenotazione->tavolo != NULL && prenotazione->tavolo->id == idTavolo && strcmp(prenotazione->fasciaOraria, fasciaOraria) == 0 &&
+        (strcmp(prenotazione->stato, "attiva") == 0 ||strcmp(prenotazione->stato, "confermata") == 0)) {
             return 1;
         }
     }
@@ -158,15 +155,16 @@ void creaPrenotazione(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
         return;
     }
 
-    leggiStringa("Fascia oraria (apertura, prime_ore, late_night): ", fasciaOraria, sizeof(fasciaOraria));
+    printf("Fascia oraria (apertura, prime_ore, late_night): ");
+    scanf(" %[^\n]", fasciaOraria);
+    
 
     printf("\n--- TAVOLI DISPONIBILI ---\n");
     for (i = 0; i < catalogo->numeroElementi; i++) {
         Tavolo *corrente = catalogo->elementi[i];
 
         if (corrente->attivo == 1 && !tavoloOccupatoInFascia(archivio, corrente->id, fasciaOraria)) {
-            printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Prezzo:%.2f\n",
-                   corrente->id, corrente->numeroTavolo, corrente->nomeTavolo,
+            printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Prezzo:%.2f\n",corrente->id, corrente->numeroTavolo, corrente->nomeTavolo,
                    corrente->zona, corrente->prezzoMinimo);
         }
     }
@@ -296,8 +294,7 @@ void controllaNoShow(ArchivioPrenotazioni *archivio) {
     for (i = 0; i < archivio->numeroElementi; i++) {
         Prenotazione *prenotazione = archivio->elementi[i];
 
-        if (strcmp(prenotazione->stato, "attiva") == 0 &&
-            adesso > prenotazione->scadenzaNoShow) {
+        if (strcmp(prenotazione->stato, "attiva") == 0 && adesso > prenotazione->scadenzaNoShow) {
             strcpy(prenotazione->stato, "no_show");
         }
     }
