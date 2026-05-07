@@ -31,6 +31,8 @@ void cercaTavoli(CatalogoTavoli *catalogo);
 void visualizzaTavoli(CatalogoTavoli *catalogo);
 
 
+
+
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo);
 
 #endif

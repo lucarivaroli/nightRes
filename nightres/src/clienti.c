@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include "clienti.h"
 #include "utils.h"
-
+// Carica i tavoli dal file CSV e li aggiunge al catalogo
 void inizializzaElencoClienti(ElencoClienti *elenco) {
     elenco->elementi = NULL;
     elenco->numeroElementi = 0;
     elenco->capacita = 0;
     elenco->prossimoId = 1;// ID univoco per ogni cliente, incrementato ad ogni aggiunta
 }
-
+// Espande la capacità dell'elenco se necessario
 void espandiElencoClienti(ElencoClienti *elenco) {
     if (elenco->numeroElementi >= elenco->capacita) {
         if (elenco->capacita == 0) {
@@ -21,7 +21,7 @@ void espandiElencoClienti(ElencoClienti *elenco) {
         elenco->elementi = realloc(elenco->elementi, elenco->capacita * sizeof(Cliente *));
     }
 }
-
+// Trova un cliente nell'elenco in base al suo ID
 Cliente *trovaClientePerId(ElencoClienti *elenco, int id) {
     int i;
     for (i = 0; i < elenco->numeroElementi; i++) {
@@ -31,7 +31,7 @@ Cliente *trovaClientePerId(ElencoClienti *elenco, int id) {
     }
     return NULL;
 }
-
+// Aggiunge un nuovo cliente all'elenco
 void aggiungiCliente(ElencoClienti *elenco) {
     Cliente *cliente = malloc(sizeof(Cliente));
 
@@ -54,7 +54,7 @@ void aggiungiCliente(ElencoClienti *elenco) {
 
     printf("Cliente aggiunto correttamente.\n");
 }
-
+// Rimuove un cliente dall'elenco
 void eliminaCliente(ElencoClienti *elenco) {
     int id;
     int i;
@@ -85,7 +85,7 @@ void eliminaCliente(ElencoClienti *elenco) {
     elenco->numeroElementi--;
     printf("Cliente eliminato.\n");
 }
-
+// Visualizza la lista completa dei clienti
 void visualizzaClienti(ElencoClienti *elenco) {
     int i;
 
@@ -95,7 +95,7 @@ void visualizzaClienti(ElencoClienti *elenco) {
         printf("ID:%d | Nome:%s | Telefono:%s | Livello:%s\n",cliente->id, cliente->nome, cliente->telefono, cliente->livelloFedelta);
     }
 }
-
+// Aggiunge una prenotazione alla lista delle prenotazioni di un cliente
 void aggiungiPrenotazioneACliente(Cliente *cliente, struct Prenotazione *prenotazione) {
     NodoPrenotazione *nuovoNodo = malloc(sizeof(NodoPrenotazione));
 
@@ -108,7 +108,7 @@ void aggiungiPrenotazioneACliente(Cliente *cliente, struct Prenotazione *prenota
     nuovoNodo->successivo = cliente->prenotazioni;
     cliente->prenotazioni = nuovoNodo;
 }
-
+// Visualizza lo storico delle prenotazioni per un cliente specifico
 void visualizzaStoricoCliente(ElencoClienti *elenco) {
     int id;
     Cliente *cliente;
@@ -153,7 +153,7 @@ void visualizzaStoricoCliente(ElencoClienti *elenco) {
     corrente = corrente->successivo;
 }
 }
-
+// Libera la memoria allocata per l'elenco dei clienti e le loro prenotazioni
 void liberaElencoClienti(ElencoClienti *elenco) {
     int i;
 

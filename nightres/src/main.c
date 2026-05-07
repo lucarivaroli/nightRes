@@ -22,16 +22,25 @@ void menuTavoli(CatalogoTavoli *catalogo) {
         pulisciInput();
 
         switch (scelta) {
-            case 1: aggiungiTavolo(catalogo); break;
-            case 2: modificaTavolo(catalogo); break;
-            case 3: eliminaTavolo(catalogo); break;
-            case 4: cercaTavoli(catalogo); break;
-            case 5: visualizzaTavoli(catalogo); break;
-            case 6: visualizzaMappaTavoli(catalogo); break;
+            case 1: 
+                aggiungiTavolo(catalogo); // Aggiunge un nuovo tavolo al catalogo
+                break;
+            case 2: 
+                modificaTavolo(catalogo); // Modifica i dettagli di un tavolo esistente
+                break;
+            case 3: 
+                eliminaTavolo(catalogo); // Rimuove un tavolo dal catalogo (disattivandolo)
+                break;
+            case 4: 
+                cercaTavoli(catalogo);// Permette di cercare tavoli in base a zona, capienza e prezzo minimo
+                break;
+            case 5: 
+                visualizzaTavoli(catalogo); // Visualizza la lista completa dei tavoli
+                break;
         }
     } while (scelta != 0);
 }
-
+// Gestisce il menu per la gestione dei clienti
 void menuClienti(ElencoClienti *elenco) {
     int scelta;
 
@@ -47,14 +56,22 @@ void menuClienti(ElencoClienti *elenco) {
         pulisciInput();
 
         switch (scelta) {
-            case 1: aggiungiCliente(elenco); break;
-            case 2: eliminaCliente(elenco); break;
-            case 3: visualizzaClienti(elenco); break;
-            case 4: visualizzaStoricoCliente(elenco); break;
+            case 1: 
+                aggiungiCliente(elenco); 
+                break;
+            case 2: 
+                eliminaCliente(elenco);
+                break;
+            case 3: 
+                visualizzaClienti(elenco); 
+                break;
+            case 4: 
+                visualizzaStoricoCliente(elenco); 
+                break;
         }
     } while (scelta != 0);
 }
-
+// Gestisce il menu per la gestione delle prenotazioni
 void menuPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco, CodaAttesa *coda) {
     int scelta;
 
@@ -71,15 +88,25 @@ void menuPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
         pulisciInput();
 
         switch (scelta) {
-            case 1: creaPrenotazione(archivio, catalogo, elenco, coda); break;
-            case 2: cancellaPrenotazione(archivio, coda); break;
-            case 3: visualizzaPrenotazioniSerata(archivio); break;
-            case 4: controllaNoShow(archivio); break;
-            case 5: visualizzaCodaAttesa(coda); break;
+            case 1: 
+                creaPrenotazione(archivio, catalogo, elenco, coda); 
+                break;
+            case 2: 
+                cancellaPrenotazione(archivio, coda);
+                break;
+            case 3:     
+                visualizzaPrenotazioniSerata(archivio); 
+                break;
+            case 4: 
+                controllaNoShow(archivio);
+                break;
+            case 5: 
+                visualizzaCodaAttesa(coda); 
+                break;
         }
     } while (scelta != 0);
 }
-
+// Funzione principale del programma
 int main() {
     CatalogoTavoli catalogoTavoli;
     ElencoClienti elencoClienti;
@@ -135,10 +162,10 @@ int main() {
         }
     } while (scelta != 0);
 
-    liberaArchivioPrenotazioni(&archivioPrenotazioni);
-    liberaElencoClienti(&elencoClienti);
-    liberaCatalogoTavoli(&catalogoTavoli);
-    liberaCodaAttesa(&codaAttesa);
+    liberaArchivioPrenotazioni(&archivioPrenotazioni);// Libera la memoria allocata per le prenotazioni
+    liberaElencoClienti(&elencoClienti);// Libera la memoria allocata per i clienti
+    liberaCatalogoTavoli(&catalogoTavoli);// Libera la memoria allocata per i tavoli
+    liberaCodaAttesa(&codaAttesa);// Libera la memoria allocata per la coda d'attesa
 
     return 0;
 }
