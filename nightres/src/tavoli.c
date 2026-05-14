@@ -185,3 +185,74 @@ void liberaCatalogoTavoli(CatalogoTavoli *catalogo) {
 
     free(catalogo->elementi);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+void visualizzaMappaTavoli(CatalogoTavoli *catalogo) {
+    int i;
+
+    printf("\n========== MAPPA TAVOLI ==========\n");
+
+    printf("\n--- ZONA VIP ---\n");
+    for (i = 0; i < catalogo->numeroElementi; i++) {
+        Tavolo *tavolo = catalogo->elementi[i];
+
+        if (strcmp(tavolo->zona, "VIP") == 0) {
+            if (tavolo->attivo == 1) {
+                printf("[Tavolo %d - Attivo] ", tavolo->numeroTavolo);
+            } else {
+                printf("[Tavolo %d - Disattivo] ", tavolo->numeroTavolo);
+            }
+        }
+    }
+
+    printf("\n\n--- ZONA DANCEFLOOR ---\n");
+    for (i = 0; i < catalogo->numeroElementi; i++) {
+        Tavolo *tavolo = catalogo->elementi[i];
+
+        if (strcmp(tavolo->zona, "dancefloor") == 0) {
+            if (tavolo->attivo == 1) {
+                printf("[Tavolo %d - Attivo] ", tavolo->numeroTavolo);
+            } else {
+                printf("[Tavolo %d - Disattivo] ", tavolo->numeroTavolo);
+            }
+        }
+    }
+
+    printf("\n\n--- ZONA LOUNGE ---\n");
+    for (i = 0; i < catalogo->numeroElementi; i++) {
+        Tavolo *tavolo = catalogo->elementi[i];
+
+        if (strcmp(tavolo->zona, "lounge") == 0) {
+            if (tavolo->attivo == 1) {
+                printf("[Tavolo %d - Attivo] ", tavolo->numeroTavolo);
+            } else {
+                printf("[Tavolo %d - Disattivo] ", tavolo->numeroTavolo);
+            }
+        }
+    }
+
+    printf("\n\n--- ZONA ESTERNO ---\n");
+    for (i = 0; i < catalogo->numeroElementi; i++) {
+        Tavolo *tavolo = catalogo->elementi[i];
+
+        if (strcmp(tavolo->zona, "esterno") == 0) {
+            if (tavolo->attivo == 1) {
+                printf("[Tavolo %d - Attivo] ", tavolo->numeroTavolo);
+            } else {
+                printf("[Tavolo %d - Disattivo] ", tavolo->numeroTavolo);
+            }
+        }
+    }
+
+    printf("\n==================================\n");
+}

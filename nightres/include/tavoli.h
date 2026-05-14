@@ -77,4 +77,16 @@ void visualizzaTavoli(CatalogoTavoli *catalogo);
  */
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo);
 
+
+
+
+
+/**
+ * Visualizza una mappa dei tavoli divisi per zona.
+ *
+ * @param catalogo Puntatore al catalogo dei tavoli.
+ * @return void
+ */
+void visualizzaMappaTavoli(CatalogoTavoli *catalogo);
+
 #endif

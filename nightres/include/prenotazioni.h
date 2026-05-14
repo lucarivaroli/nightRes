@@ -55,7 +55,7 @@ typedef struct {
  */
 void inizializzaArchivioPrenotazioni(ArchivioPrenotazioni *archivio);
 
-/** Espande la capacità dell'archivio delle prenotazioni quando necessario.
+/** Espande la capacità dell'1archivio delle prenotazioni quando necessario.
  * @param archivio Puntatore all'archivio delle prenotazioni
  */
 void espandiArchivioPrenotazioni(ArchivioPrenotazioni *archivio);

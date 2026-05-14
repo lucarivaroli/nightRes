@@ -5,11 +5,19 @@
 
 struct Prenotazione;
 
+/** Nodo della lista delle prenotazioni di un cliente.
+ * Ogni nodo contiene un puntatore a una prenotazione e il puntatore
+ * al nodo successivo nella lista.
+ */
 typedef struct NodoPrenotazione {
     struct Prenotazione *prenotazione;
     struct NodoPrenotazione *successivo;
 } NodoPrenotazione;
 
+/** Rappresenta un cliente del ristorante.
+ * Contiene informazioni anagrafiche, livello di fedeltà e la lista
+ * delle prenotazioni associate al cliente.
+ */
 typedef struct {
     int id;
     char nome[MAX_STR];
@@ -18,6 +26,9 @@ typedef struct {
     NodoPrenotazione *prenotazioni;
 } Cliente;
 
+/** Rappresenta un elenco di clienti.
+ * Contiene un array di puntatori ai clienti e gestisce capacità e ID successivo.
+ */
 typedef struct {
     Cliente **elementi;
     int numeroElementi;
