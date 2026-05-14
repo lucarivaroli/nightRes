@@ -2,23 +2,22 @@
 #include <string.h>
 #include <time.h>
 #include "utils.h"
-
+// Funzione per pulire il buffer di input dopo una lettura
 void pulisciInput() {
     int carattere;
     while ((carattere = getchar()) != '\n' && carattere != EOF) {
     }
 }
-
-
+//Stampa la data e l'ora in un formato leggibile
 void stampaDataOra(time_t valoreTempo) {
     char buffer[64];
     struct tm *infoTempo = localtime(&valoreTempo);
     strftime(buffer, sizeof(buffer), "%d/%m/%Y %H:%M", infoTempo);
     printf("%s", buffer);
 }
-
-void stampaBarra(int valore, int massimo) { // Stampa una barra di progresso testuale proporzionale al valore rispetto al massimo
-    int numeroBarre;                        //funzione che serve dopo per mostrare le statistiche 
+// Stampa una barra di progresso testuale proporzionale al valore rispetto al massimo
+void stampaBarra(int valore, int massimo) { 
+    int numeroBarre;                        
     int i;
 
     if (massimo <= 0) {
@@ -32,7 +31,7 @@ void stampaBarra(int valore, int massimo) { // Stampa una barra di progresso tes
     }
     printf(" (%d)", valore);
 }
-
+// Ordina i tavoli in base al numero del tavolo usando il bubble sort
 void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
     int i, j;
     Tavolo *temp;
@@ -48,7 +47,7 @@ void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
         }
     }
 }
-
+// Mostra statistiche dettagliate sui tavoli, clienti e prenotazioni
 void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, ArchivioPrenotazioni *archivio) {
     int i, j;
     int massimoPrenotazioniTavolo = 0;
@@ -130,10 +129,18 @@ void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, Archivio
         if (richiesteEsterno > massimoZona) massimoZona = richiesteEsterno;
 
         printf("Zona piu' richiesta:\n");
-        printf("VIP        "); stampaBarra(richiesteVip, massimoZona); printf("\n");
-        printf("dancefloor "); stampaBarra(richiesteDancefloor, massimoZona); printf("\n");
-        printf("lounge     "); stampaBarra(richiesteLounge, massimoZona); printf("\n");
-        printf("esterno    "); stampaBarra(richiesteEsterno, massimoZona); printf("\n");
+        printf("VIP        "); 
+        stampaBarra(richiesteVip, massimoZona); 
+        printf("\n");
+        printf("dancefloor "); 
+        stampaBarra(richiesteDancefloor, massimoZona); 
+        printf("\n");
+        printf("lounge     "); 
+        stampaBarra(richiesteLounge, massimoZona); 
+        printf("\n");
+        printf("esterno    "); 
+        stampaBarra(richiesteEsterno, massimoZona); 
+        printf("\n");
     }
 
     if (archivio->numeroElementi > 0) {

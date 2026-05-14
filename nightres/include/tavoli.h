@@ -72,6 +72,7 @@ void cercaTavoli(CatalogoTavoli *catalogo);
  */
 void visualizzaTavoli(CatalogoTavoli *catalogo);
 
+
 /** Libera la memoria usata dal catalogo dei tavoli.
  * @param catalogo Puntatore al catalogo dei tavoli
  */

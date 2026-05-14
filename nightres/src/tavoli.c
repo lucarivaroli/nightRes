@@ -3,14 +3,14 @@
 #include <string.h>
 #include "tavoli.h"
 #include "utils.h"
-
+// Gestisce il menu per la gestione dei tavoli
 void inizializzaCatalogoTavoli(CatalogoTavoli *catalogo) {
     catalogo->elementi = NULL;
     catalogo->numeroElementi = 0;
     catalogo->capacita = 0;
     catalogo->prossimoId = 1;// ID univoco per ogni tavolo, incrementato ad ogni aggiunta
 }
-
+// Espande la capacità del catalogo se necessario
 void espandiCatalogoTavoli(CatalogoTavoli *catalogo) {// Espande la capacità del catalogo se necessario
     if (catalogo->numeroElementi >= catalogo->capacita) {
         if (catalogo->capacita == 0) {
@@ -22,7 +22,7 @@ void espandiCatalogoTavoli(CatalogoTavoli *catalogo) {// Espande la capacità de
         catalogo->elementi = realloc(catalogo->elementi, catalogo->capacita * sizeof(Tavolo *));
     }
 }
-
+// Trova un tavolo nel catalogo in base al suo ID
 Tavolo *trovaTavoloPerId(CatalogoTavoli *catalogo, int id) {
     int i;
     for (i = 0; i < catalogo->numeroElementi; i++) {
@@ -32,7 +32,7 @@ Tavolo *trovaTavoloPerId(CatalogoTavoli *catalogo, int id) {
     }
     return NULL;
 }
-
+// Aggiunge un nuovo tavolo al catalogo
 void aggiungiTavolo(CatalogoTavoli *catalogo) {
     Tavolo *tavolo = malloc(sizeof(Tavolo));
 
@@ -61,7 +61,7 @@ void aggiungiTavolo(CatalogoTavoli *catalogo) {
 
     printf("Tavolo aggiunto correttamente.\n");
 }
-
+// Modifica i dettagli di un tavolo esistente
 void modificaTavolo(CatalogoTavoli *catalogo) {
     int id;
     Tavolo *tavolo;
@@ -98,7 +98,7 @@ void modificaTavolo(CatalogoTavoli *catalogo) {
 
     printf("Tavolo modificato.\n");
 }
-
+// Rimuove un tavolo dal catalogo (disattivandolo)
 void eliminaTavolo(CatalogoTavoli *catalogo) {
     int id;
     Tavolo *tavolo;
@@ -117,7 +117,7 @@ void eliminaTavolo(CatalogoTavoli *catalogo) {
     tavolo->attivo = 0;
     printf("Tavolo disattivato.\n");
 }
-
+// Permette di cercare tavoli in base a zona, capienza e prezzo minimo
 void cercaTavoli(CatalogoTavoli *catalogo) {
     char zona[30];
     int capienzaMinima;
@@ -144,7 +144,7 @@ void cercaTavoli(CatalogoTavoli *catalogo) {
         }
     }
 }
-
+// Visualizza la lista completa dei tavoli
 void visualizzaTavoli(CatalogoTavoli *catalogo) {
     int i;
 
@@ -175,6 +175,8 @@ void visualizzaTavoli(CatalogoTavoli *catalogo) {
     
 }
 
+
+// Libera la memoria allocata per il catalogo dei tavoli
 
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo) {
     int i;

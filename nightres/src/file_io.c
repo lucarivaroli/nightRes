@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "file_io.h"
-
+// Salva i tavoli in un file CSV, includendo il loro ID, numero, nome, zona, capienza, prezzo minimo e stato di attivazione
 void salvaTavoli(CatalogoTavoli *catalogo) {
     FILE *file = fopen("nightres/csv/Tavoli.csv", "w");
     int i;
@@ -18,7 +18,7 @@ void salvaTavoli(CatalogoTavoli *catalogo) {
 
     fclose(file);
 }
-
+// Salva i clienti in un file CSV, includendo il loro ID, nome, telefono e livello di fedeltà
 void salvaClienti(ElencoClienti *elenco) {
     FILE *file = fopen("nightres/csv/Clienti.csv", "w");
     int i;
@@ -34,7 +34,7 @@ void salvaClienti(ElencoClienti *elenco) {
 
     fclose(file);
 }
-
+// Salva le prenotazioni in un file CSV, associando gli ID dei tavoli e clienti
 void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
     FILE *file = fopen("nightres/csv/Prenotazioni.csv", "w");
     int i, idTavolo, idCliente;
@@ -71,7 +71,7 @@ void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
 
     fclose(file);
 }
-
+// Salva lo storico delle prenotazioni per ogni cliente in un file CSV
 void salvaStorico(ElencoClienti *elenco) {
     FILE *file = fopen("nightres/csv/Storico.csv", "w");
     int i;
@@ -93,7 +93,7 @@ void salvaStorico(ElencoClienti *elenco) {
 
     fclose(file);
 }
-
+// Carica i tavoli dal file CSV e li aggiunge al catalogo
 void caricaTavoli(CatalogoTavoli *catalogo) {
     FILE *file = fopen("nightres/csv/Tavoli.csv", "r");
     char riga[256];
@@ -132,7 +132,7 @@ void caricaTavoli(CatalogoTavoli *catalogo) {
 
     fclose(file);
 }
-
+// Carica i clienti dal file CSV e inizializza le loro prenotazioni come NULL
 void caricaClienti(ElencoClienti *elenco) {
     FILE *file = fopen("nightres/csv/Clienti.csv", "r");
     char riga[256];
@@ -170,7 +170,7 @@ void caricaClienti(ElencoClienti *elenco) {
 
     fclose(file);
 }
-
+// Carica le prenotazioni dal file CSV e le associa ai tavoli e clienti corrispondenti
 void caricaPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco) {
     FILE *file = fopen("nightres/csv/Prenotazioni.csv", "r");
     char riga[512];
@@ -228,7 +228,7 @@ void caricaPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo
 
     fclose(file);
 }
-
+// Salva tutti i dati (tavoli, clienti, prenotazioni e storico) nei rispettivi file CSV
 void salvaTutto(CatalogoTavoli *catalogo, ElencoClienti *elenco, ArchivioPrenotazioni *archivio) {
     salvaTavoli(catalogo);
     salvaClienti(elenco);
