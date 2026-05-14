@@ -22,12 +22,24 @@ void menuTavoli(CatalogoTavoli *catalogo) {
         pulisciInput();
 
         switch (scelta) {
-            case 1: aggiungiTavolo(catalogo); break;
-            case 2: modificaTavolo(catalogo); break;
-            case 3: eliminaTavolo(catalogo); break;
-            case 4: cercaTavoli(catalogo); break;
-            case 5: visualizzaTavoli(catalogo); break;
-            case 6: visualizzaMappaTavoli(catalogo); break;
+            case 1: 
+                aggiungiTavolo(catalogo); 
+                break;
+            case 2: 
+                modificaTavolo(catalogo); 
+                break;
+            case 3: 
+                eliminaTavolo(catalogo); 
+                break;
+            case 4: 
+                cercaTavoli(catalogo); 
+                break;
+            case 5: 
+                visualizzaTavoli(catalogo); 
+                break;
+            case 6: 
+                visualizzaMappaTavoli(catalogo); 
+                break;
         }
     } while (scelta != 0);
 }
@@ -47,10 +59,18 @@ void menuClienti(ElencoClienti *elenco) {
         pulisciInput();
 
         switch (scelta) {
-            case 1: aggiungiCliente(elenco); break;
-            case 2: eliminaCliente(elenco); break;
-            case 3: visualizzaClienti(elenco); break;
-            case 4: visualizzaStoricoCliente(elenco); break;
+            case 1: 
+                aggiungiCliente(elenco); 
+                break;
+            case 2: 
+                eliminaCliente(elenco); 
+                break;
+            case 3: 
+                visualizzaClienti(elenco); 
+                break;
+            case 4: 
+                visualizzaStoricoCliente(elenco); 
+                break;
         }
     } while (scelta != 0);
 }
@@ -71,11 +91,21 @@ void menuPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
         pulisciInput();
 
         switch (scelta) {
-            case 1: creaPrenotazione(archivio, catalogo, elenco, coda); break;
-            case 2: cancellaPrenotazione(archivio, coda); break;
-            case 3: visualizzaPrenotazioniSerata(archivio); break;
-            case 4: controllaNoShow(archivio); break;
-            case 5: visualizzaCodaAttesa(coda); break;
+            case 1: 
+                creaPrenotazione(archivio, catalogo, elenco, coda); 
+                break;
+            case 2: 
+                cancellaPrenotazione(archivio, coda); 
+                break;
+            case 3: 
+                visualizzaPrenotazioniSerata(archivio); 
+                break;
+            case 4: 
+                controllaNoShow(archivio); 
+                break;
+            case 5: 
+                visualizzaCodaAttesa(coda); 
+                break;
         }
     } while (scelta != 0);
 }
