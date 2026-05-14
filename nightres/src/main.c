@@ -5,6 +5,7 @@
 #include "file_io.h"
 #include "utils.h"
 
+
 void menuTavoli(CatalogoTavoli *catalogo) {
     int scelta;
 
