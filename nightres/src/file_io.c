@@ -4,7 +4,7 @@
 #include "file_io.h"
 
 void salvaTavoli(CatalogoTavoli *catalogo) {
-    FILE *file = fopen("csv/Tavoli.csv", "w");
+    FILE *file = fopen("nightres/csv/Tavoli.csv", "w");
     int i;
 
     if (file == NULL) {
@@ -20,7 +20,7 @@ void salvaTavoli(CatalogoTavoli *catalogo) {
 }
 
 void salvaClienti(ElencoClienti *elenco) {
-    FILE *file = fopen("csv/Clienti.csv", "w");
+    FILE *file = fopen("nightres/csv/Clienti.csv", "w");
     int i;
 
     if (file == NULL) {
@@ -36,7 +36,7 @@ void salvaClienti(ElencoClienti *elenco) {
 }
 
 void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
-    FILE *file = fopen("csv/Prenotazioni.csv", "w");
+    FILE *file = fopen("nightres/csv/Prenotazioni.csv", "w");
     int i, idTavolo, idCliente;
 
     if (file == NULL) {
@@ -73,7 +73,7 @@ void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
 }
 
 void salvaStorico(ElencoClienti *elenco) {
-    FILE *file = fopen("csv/Storico.csv", "w");
+    FILE *file = fopen("nightres/csv/Storico.csv", "w");
     int i;
 
     if (file == NULL) {
@@ -95,7 +95,7 @@ void salvaStorico(ElencoClienti *elenco) {
 }
 
 void caricaTavoli(CatalogoTavoli *catalogo) {
-    FILE *file = fopen("csv/Tavoli.csv", "r");
+    FILE *file = fopen("nightres/csv/Tavoli.csv", "r");
     char riga[256];
 
     if (file == NULL) {
@@ -134,7 +134,7 @@ void caricaTavoli(CatalogoTavoli *catalogo) {
 }
 
 void caricaClienti(ElencoClienti *elenco) {
-    FILE *file = fopen("csv/Clienti.csv", "r");
+    FILE *file = fopen("nightres/csv/Clienti.csv", "r");
     char riga[256];
 
     if (file == NULL) {
@@ -172,7 +172,7 @@ void caricaClienti(ElencoClienti *elenco) {
 }
 
 void caricaPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco) {
-    FILE *file = fopen("csv/Prenotazioni.csv", "r");
+    FILE *file = fopen("nightres/csv/Prenotazioni.csv", "r");
     char riga[512];
 
     if (file == NULL) {
