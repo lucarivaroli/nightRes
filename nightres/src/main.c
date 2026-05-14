@@ -16,7 +16,7 @@ void menuTavoli(CatalogoTavoli *catalogo) {
         printf("3. Elimina tavolo\n");
         printf("4. Cerca tavoli\n");
         printf("5. Visualizza tavoli\n");
-        printf("6. Visualizza mappa tavoli\n");
+        printf("6. Visualizza mappa dei tavoli\n");
         printf("0. Indietro\n");
         printf("Scelta: ");
         scanf("%d", &scelta);

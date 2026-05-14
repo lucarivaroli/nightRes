@@ -186,17 +186,6 @@ void liberaCatalogoTavoli(CatalogoTavoli *catalogo) {
     free(catalogo->elementi);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void visualizzaMappaTavoli(CatalogoTavoli *catalogo) {
     int i;
 
