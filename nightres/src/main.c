@@ -11,7 +11,7 @@ void menuTavoli(CatalogoTavoli *catalogo) {
 
     do {
         printf("\n--- MENU TAVOLI ---\n");
-        printf("1. LAggiungi tavolo\n");
+        printf("1. Aggiungi tavolo\n");
         printf("2. Modifica tavolo\n");
         printf("3. Elimina tavolo\n");
         printf("4. Cerca tavoli\n");
