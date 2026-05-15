@@ -13,7 +13,7 @@ void salvaTavoli(CatalogoTavoli *catalogo) {
 
     for (i = 0; i < catalogo->numeroElementi; i++) {
         Tavolo *tavolo = catalogo->elementi[i];
-        fprintf(file, "%d,%d,%s,%s,%d,%.2f,%d\n",tavolo->id,tavolo->numeroTavolo,tavolo->nomeTavolo,tavolo->zona,tavolo->capienza,tavolo->prezzoMinimo,tavolo->attivo);
+        fprintf(file, "id: %d,numero: %d,nome: %s,zona: %s,capienza: %d,prezzoMinimo: %.2f,attivo: %d\n",tavolo->id,tavolo->numeroTavolo,tavolo->nomeTavolo,tavolo->zona,tavolo->capienza,tavolo->prezzoMinimo,tavolo->attivo);
     }
 
     fclose(file);
@@ -29,7 +29,7 @@ void salvaClienti(ElencoClienti *elenco) {
 
     for (i = 0; i < elenco->numeroElementi; i++) {
         Cliente *cliente = elenco->elementi[i];
-        fprintf(file, "%d,%s,%s,%s\n",cliente->id,cliente->nome,cliente->telefono,cliente->livelloFedelta);
+        fprintf(file, "id: %d,nome: %s,telefono: %s,livelloFedelta: %s\n",cliente->id,cliente->nome,cliente->telefono,cliente->livelloFedelta);
     }
 
     fclose(file);
@@ -45,7 +45,7 @@ void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
 
     for (i = 0; i < archivio->numeroElementi; i++) {
 
-    Prenotazione *prenotazione = archivio->elementi[i];
+    Prenotazione *prenotazione = archivio->elementi[i]; //prende una prenotazione alla volta
 
     if (prenotazione->tavolo != NULL) {
         idTavolo = prenotazione->tavolo->id;
@@ -59,10 +59,8 @@ void salvaPrenotazioni(ArchivioPrenotazioni *archivio) {
         idCliente = -1;// Valore speciale per indicare nessun cliente associato
     }
 
-    fprintf(file, "%d,%d,%d,%s,%.2f,%s,%lld,%lld,%lld\n",prenotazione->id,idTavolo,idCliente,prenotazione->fasciaOraria,
-            prenotazione->caparra,
-            prenotazione->stato,
-            (long long)prenotazione->creazione,
+    fprintf(file, "id: %d,idTavolo: %d,idCliente: %d,fasciaOraria: %s,caparra: %.2f,stato: %s,creazione: %lld,inizioTurno: %lld,scadenzaNoShow: %lld\n",prenotazione->id,idTavolo,idCliente,prenotazione->fasciaOraria,prenotazione->caparra,prenotazione->stato,
+            (long long)prenotazione->creazione,//long long perche e un numero intero di grandi dimensioni
             (long long)prenotazione->inizioTurno,
             (long long)prenotazione->scadenzaNoShow);
 }
@@ -81,12 +79,10 @@ void salvaStorico(ElencoClienti *elenco) {
     }
 
     for (i = 0; i < elenco->numeroElementi; i++) {
-        NodoPrenotazione *corrente = elenco->elementi[i]->prenotazioni;
+        NodoPrenotazione *corrente = elenco->elementi[i]->prenotazioni; //prende la lista delle prenotazioni del cliente corrente
 
         while (corrente != NULL) {
-            fprintf(file, "%d,%d\n",
-                    elenco->elementi[i]->id,
-                    corrente->prenotazione->id);
+            fprintf(file, "id cliente: %d,id prenotazione: %d\n",elenco->elementi[i]->id,corrente->prenotazione->id); // Salva l'ID del cliente e l'ID della prenotazione associata al cliente
             corrente = corrente->successivo;
         }
     }
@@ -106,24 +102,17 @@ void caricaTavoli(CatalogoTavoli *catalogo) {
 
         Tavolo *tavolo = malloc(sizeof(Tavolo));
 
-        int letti = sscanf(riga,
-            "%d,%d,%49[^,],%29[^,],%d,%f,%d",       //sscanf: legge un intero, un intero, una stringa fino a 49 caratteri o fino a virgola, una stringa fino a 29 caratteri o fino a virgola, un intero, un float, un intero
-            &tavolo->id,
-            &tavolo->numeroTavolo,
-            tavolo->nomeTavolo,
-            tavolo->zona,
-            &tavolo->capienza,
-            &tavolo->prezzoMinimo,
-            &tavolo->attivo
-        );
+        // Utilizza sscanf per leggere i campi dalla riga, assicurandosi di gestire correttamente le stringhe con spazi
+        int letti = 0;
+        letti = sscanf(riga,"id: %d,numero: %d,nome: %49[^,],zona: %29[^,],capienza: %d,prezzoMinimo: %f,attivo: %d",&tavolo->id,&tavolo->numeroTavolo,tavolo->nomeTavolo,tavolo->zona,&tavolo->capienza,&tavolo->prezzoMinimo,&tavolo->attivo);
 
         if (letti != 7) {       // Controlla se sono stati letti tutti i campi necessari
             free(tavolo);
-            continue;
+            continue; // Se la riga non è formattata correttamente, libera la memoria allocata per il tavolo e passa alla riga successiva
         }
 
         espandiCatalogoTavoli(catalogo);
-        catalogo->elementi[catalogo->numeroElementi++] = tavolo;
+        catalogo->elementi[catalogo->numeroElementi++] = tavolo; // Aggiunge il tavolo al catalogo e incrementa il numero di elementi
 
         if (tavolo->id >= catalogo->prossimoId) {
             catalogo->prossimoId = tavolo->id + 1;
@@ -145,26 +134,23 @@ void caricaClienti(ElencoClienti *elenco) {
 
         Cliente *cliente = malloc(sizeof(Cliente));
 
-        int letti = sscanf(riga,
-            "%d,%99[^,],%29[^,],%19[^\n]",
-            &cliente->id,
-            cliente->nome,
-            cliente->telefono,
-            cliente->livelloFedelta
-        );
+        int letti = 0;
+
+        letti = sscanf(riga,"id: %d,nome: %99[^,],telefono: %29[^,],livelloFedelta: %19[^\n]",&cliente->id,cliente->nome,cliente->telefono,cliente->livelloFedelta);
 
         if (letti != 4) {
             free(cliente);
-            continue;
+            continue; // Se la riga non è formattata correttamente, libera la memoria allocata per il cliente e passa alla riga successiva
         }
 
-        cliente->prenotazioni = NULL;
+        cliente->prenotazioni = NULL; 
 
-        espandiElencoClienti(elenco);
-        elenco->elementi[elenco->numeroElementi++] = cliente;
+        espandiElencoClienti(elenco); // Assicura che ci sia spazio extra per il nuovo cliente grazie alla reallocazione dinamica
+        elenco->elementi[elenco->numeroElementi++] = cliente; // Aggiunge il cliente all'elenco e incrementa il numero di elementi
 
+        // Aggiorna il prossimo ID disponibile se l'ID del cliente appena caricato è maggiore o uguale al prossimo ID disponibile
         if (cliente->id >= elenco->prossimoId) {
-            elenco->prossimoId = cliente->id + 1;
+            elenco->prossimoId = cliente->id + 1; 
         }
     }
 
@@ -185,34 +171,25 @@ void caricaPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo
 
         int idTavolo;
         int idCliente;
-        long long creazione;
-        long long inizioTurno;
+        long long creazione; //si utilizza la long long per rappresentare il tempo in secondi
+        long long inizioTurno; 
         long long scadenzaNoShow;
 
-        int letti = sscanf(riga,
-            "%d,%d,%d,%19[^,],%f,%19[^,],%lld,%lld,%lld",
-            &prenotazione->id,
-            &idTavolo,
-            &idCliente,
-            prenotazione->fasciaOraria,
-            &prenotazione->caparra,
-            prenotazione->stato,
-            &creazione,
-            &inizioTurno,
-            &scadenzaNoShow
-        );
+        int letti = 0;
+        letti = sscanf(riga,"id: %d,idTavolo: %d,idCliente: %d,fasciaOraria: %19[^,],caparra: %f,stato: %19[^,],creazione: %lld,inizioTurno: %lld,scadenzaNoShow: %lld",&prenotazione->id,&idTavolo,&idCliente,prenotazione->fasciaOraria,&prenotazione->caparra,prenotazione->stato,&creazione,&inizioTurno,&scadenzaNoShow);
 
         if (letti != 9) {
             free(prenotazione);
             continue;
         }
 
-        prenotazione->creazione = (time_t)creazione;
+        //i valori di tempo sono stati salvati come long long (rappresentando il numero di secondi) e devono essere convertiti in time_t per essere utilizzati correttamente nel programma
+        prenotazione->creazione = (time_t)creazione; //converte il valore letto da long long a time_t
         prenotazione->inizioTurno = (time_t)inizioTurno;
         prenotazione->scadenzaNoShow = (time_t)scadenzaNoShow;
 
-        prenotazione->tavolo = trovaTavoloPerId(catalogo, idTavolo);
-        prenotazione->cliente = trovaClientePerId(elenco, idCliente);
+        prenotazione->tavolo = trovaTavoloPerId(catalogo, idTavolo);// Associa il tavolo alla prenotazione cercandolo nel catalogo tramite l'ID del tavolo
+        prenotazione->cliente = trovaClientePerId(elenco, idCliente);// Associa il cliente alla prenotazione cercandolo nell'elenco tramite l'ID del cliente
 
         espandiArchivioPrenotazioni(archivio);
         archivio->elementi[archivio->numeroElementi++] = prenotazione;

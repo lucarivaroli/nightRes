@@ -156,22 +156,13 @@ void visualizzaTavoli(CatalogoTavoli *catalogo) {
     for (i = 0; i < catalogo->numeroElementi; i++) { // Scorre tutti i tavoli nel catalogo
         Tavolo *tavolo = catalogo->elementi[i];
         if (tavolo->attivo == 1) { // Se il tavolo è attivo, stampa le sue informazioni con l'indicazione "Attivo"
-        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Attivo\n",
-            tavolo->id,
-            tavolo->numeroTavolo,
-            tavolo->nomeTavolo,
-            tavolo->zona,
-            tavolo->capienza,
-            tavolo->prezzoMinimo);
-    } else {
-        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Disattivo\n",
-            tavolo->id,
-            tavolo->numeroTavolo,
-            tavolo->nomeTavolo,
-            tavolo->zona,
-            tavolo->capienza,
-            tavolo->prezzoMinimo);
-        }
+        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Attivo\n",tavolo->id,tavolo->numeroTavolo,tavolo->nomeTavolo,tavolo->zona,tavolo->capienza,tavolo->prezzoMinimo);
+    } 
+    else 
+    {
+        printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Disattivo\n",tavolo->id,tavolo->numeroTavolo,tavolo->nomeTavolo,tavolo->zona,tavolo->capienza,tavolo->prezzoMinimo);
+        
+    }
     }
         
     

@@ -210,11 +210,11 @@ void creaPrenotazione(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
         espandiArchivioPrenotazioni(archivio);
         archivio->elementi[archivio->numeroElementi++] = prenotazione;
 
+        // Aggiunge la prenotazione alla lista delle prenotazioni del cliente
         aggiungiPrenotazioneACliente(cliente, prenotazione);
 
-        printf("Prenotazione creata. ID:%d | Caparra: %.2f | Scadenza no-show: ",
-               prenotazione->id, prenotazione->caparra);
-        stampaDataOra(prenotazione->scadenzaNoShow);
+        printf("Prenotazione creata. ID:%d | Caparra: %.2f | Scadenza no-show: ",prenotazione->id, prenotazione->caparra);
+        stampaDataOra(prenotazione->scadenzaNoShow); //stampa la data e ora della scadenza del no-show in un formato leggibile per l'utente
         printf("\n");
     }
 }
@@ -226,21 +226,23 @@ void assegnaPrimoDellaCoda(ArchivioPrenotazioni *archivio, Tavolo *tavoloLiberat
         return;
     }
 
-    nodoCoda = estraiDallaCoda(coda);
+    nodoCoda = estraiDallaCoda(coda); //estrae il primo cliente dalla coda di attesa e lo memorizza in nodoCoda
 
-    if (nodoCoda != NULL) {
+
+    if (nodoCoda != NULL) { //se c'è un cliente in attesa, crea una nuova prenotazione per quel cliente e il tavolo appena liberato
         Prenotazione *prenotazione = malloc(sizeof(Prenotazione));
 
-        prenotazione->id = archivio->prossimoId++;
-        prenotazione->tavolo = tavoloLiberato;
-        prenotazione->cliente = nodoCoda->cliente;
-        strcpy(prenotazione->fasciaOraria, nodoCoda->fasciaOraria);
-        prenotazione->caparra = tavoloLiberato->prezzoMinimo * 0.30f;
+        prenotazione->id = archivio->prossimoId++; //assegna un ID univoco alla prenotazione e incrementa il contatore per la prossima prenotazione
+        prenotazione->tavolo = tavoloLiberato;// associa il tavolo appena liberato alla prenotazione
+        prenotazione->cliente = nodoCoda->cliente;// associa il cliente estratto dalla coda alla prenotazione
+        strcpy(prenotazione->fasciaOraria, nodoCoda->fasciaOraria);//copia la fascia oraria richiesta dal cliente nella struttura della prenotazione
+        prenotazione->caparra = tavoloLiberato->prezzoMinimo * 0.30f;//calcola la caparra come il 30% del prezzo minimo del tavolo e la assegna alla prenotazione
         strcpy(prenotazione->stato, "attiva");
         prenotazione->creazione = time(NULL);
-        prenotazione->inizioTurno = creaOrarioTurno(prenotazione->fasciaOraria);
-        prenotazione->scadenzaNoShow = prenotazione->inizioTurno + 30 * 60;
+        prenotazione->inizioTurno = creaOrarioTurno(prenotazione->fasciaOraria); //calcola l'orario dell'inizio turno e lo assegna alla prenotazione
+        prenotazione->scadenzaNoShow = prenotazione->inizioTurno + 30 * 60; 
 
+        
         espandiArchivioPrenotazioni(archivio);
         archivio->elementi[archivio->numeroElementi++] = prenotazione;
         aggiungiPrenotazioneACliente(nodoCoda->cliente, prenotazione);
@@ -260,24 +262,26 @@ void cancellaPrenotazione(ArchivioPrenotazioni *archivio, CodaAttesa *coda) {
     scanf("%d", &id);
     pulisciInput();
 
-    prenotazione = trovaPrenotazionePerId(archivio, id);
+    prenotazione = trovaPrenotazionePerId(archivio, id); //trova la prenotazione tramite id
 
     if (prenotazione == NULL) {
         printf("Prenotazione non trovata.\n");
         return;
     }
 
+    
     if (strcmp(prenotazione->stato, "attiva") != 0) {
         printf("Prenotazione non cancellabile. Stato corrente: %s\n", prenotazione->stato);
         return;
     }
 
-    penale = prenotazione->caparra * 0.50f;
-    strcpy(prenotazione->stato, "cancellata");
+    penale = prenotazione->caparra * 0.50f; //calcola la penale e prende il 50% della caparra 
+    strcpy(prenotazione->stato, "cancellata"); //aggiorna lo stato della prenotazione a "cancellata"
 
     printf("Prenotazione cancellata. Penale: %.2f euro\n", penale);
 
-    assegnaPrimoDellaCoda(archivio, prenotazione->tavolo, coda);
+    assegnaPrimoDellaCoda(archivio, prenotazione->tavolo, coda); 
+    //dopo aver cancellato la prenotazione, chiama la funzione assegnaPrimoDellaCoda per assegnare il tavolo liberato al primo cliente in coda di attesa
 }
 
 void visualizzaPrenotazioniSerata(ArchivioPrenotazioni *archivio) {
@@ -285,28 +289,39 @@ void visualizzaPrenotazioniSerata(ArchivioPrenotazioni *archivio) {
 
     printf("\n--- PRENOTAZIONI SERATA ---\n");
 
-    for (i = 0; i < archivio->numeroElementi; i++) {
-        Prenotazione *prenotazione = archivio->elementi[i];
+   for (i = 0; i < archivio->numeroElementi; i++) {
+    Prenotazione *prenotazione = archivio->elementi[i];
 
-        printf("ID:%d | Cliente:%s | Tavolo:%d | Fascia:%s | Stato:%s | Caparra:%.2f\n",
-               prenotazione->id,
-               prenotazione->cliente ? prenotazione->cliente->nome : "N/D",
-               prenotazione->tavolo ? prenotazione->tavolo->numeroTavolo : -1,
-               prenotazione->fasciaOraria,
-               prenotazione->stato,
-               prenotazione->caparra);
+    if (prenotazione->cliente != NULL) { //controlla se ce un cliente associato alla prenotazione
+
+        // Se il tavolo associato alla prenotazione non è NULL, stampa le informazioni della prenotazione
+        if (prenotazione->tavolo != NULL) {
+            // Stampa le informazioni della prenotazione, inclusi ID, nome del cliente, numero del tavolo, fascia oraria, stato e caparra
+            printf("ID:%d | Cliente:%s | Tavolo:%d | Fascia:%s | Stato:%s | Caparra:%.2f\n",prenotazione->id,prenotazione->cliente->nome,prenotazione->tavolo->numeroTavolo,prenotazione->fasciaOraria,prenotazione->stato,prenotazione->caparra);
+
+        } else {
+            // Se il tavolo è NULL, stampa "N/D" al posto del numero del tavolo
+            printf("ID:%d | Cliente:%s | Tavolo:N/D | Fascia:%s | Stato:%s | Caparra:%.2f\n",prenotazione->id,prenotazione->cliente->nome,prenotazione->fasciaOraria,prenotazione->stato,prenotazione->caparra);
+        }
+
+    } else {
+        // Se il cliente associato alla prenotazione è NULL, stampa "N/D" al posto del nome del cliente e del numero del tavolo
+        printf("ID:%d | Cliente:N/D | Tavolo:N/D | Fascia:%s | Stato:%s | Caparra:%.2f\n",prenotazione->id,prenotazione->fasciaOraria,prenotazione->stato,prenotazione->caparra);
     }
 }
+}
 
+// Funzione per controllare le prenotazioni attive e aggiornare lo stato a "no_show" se la scadenza del no-show è passata
 void controllaNoShow(ArchivioPrenotazioni *archivio) {
     int i;
-    time_t adesso = time(NULL);
+    time_t adesso = time(NULL); // Ottiene il tempo attuale in secondi dal 1 gennaio 1970
 
     for (i = 0; i < archivio->numeroElementi; i++) {
         Prenotazione *prenotazione = archivio->elementi[i];
 
+        // Controlla se la prenotazione è attiva e se la scadenza del no-show è passata
         if (strcmp(prenotazione->stato, "attiva") == 0 && adesso > prenotazione->scadenzaNoShow) {
-            strcpy(prenotazione->stato, "no_show");
+            strcpy(prenotazione->stato, "no_show"); // Aggiorna lo stato della prenotazione a "no_show" se la scadenza è passata
         }
     }
 

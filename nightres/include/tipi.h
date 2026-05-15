@@ -52,7 +52,7 @@ typedef struct Prenotazione {
     char fascia[20];     // apertura, prime_ore, late_night
     float caparra;
     char stato[20];      // attiva, cancellata, no_show
-    time_t creazione;
+    time_t creazione; 
     time_t inizioTurno;
     time_t scadenzaNoShow;
 } Prenotazione;

@@ -136,22 +136,14 @@ void visualizzaStoricoCliente(ElencoClienti *elenco) {
 
     while (corrente != NULL) {
         if (corrente->prenotazione->tavolo != NULL) {
-            printf("Prenotazione ID:%d | Tavolo:%d | Fascia:%s | Stato:%s | Caparra:%.2f\n",
-               corrente->prenotazione->id,
-               corrente->prenotazione->tavolo->numeroTavolo,
-               corrente->prenotazione->fasciaOraria,
-               corrente->prenotazione->stato,
-               corrente->prenotazione->caparra);
-    } else {
-            printf("Prenotazione ID:%d | Tavolo:non assegnato | Fascia:%s | Stato:%s | Caparra:%.2f\n",
-               corrente->prenotazione->id,
-               corrente->prenotazione->fasciaOraria,
-               corrente->prenotazione->stato,
-               corrente->prenotazione->caparra);
+            printf("Prenotazione ID:%d | Tavolo:%d | Fascia:%s | Stato:%s | Caparra:%.2f\n",corrente->prenotazione->id,corrente->prenotazione->tavolo->numeroTavolo,corrente->prenotazione->fasciaOraria,corrente->prenotazione->stato,corrente->prenotazione->caparra);
+    } else 
+    {
+            printf("Prenotazione ID:%d | Tavolo:non assegnato | Fascia:%s | Stato:%s | Caparra:%.2f\n",corrente->prenotazione->id,corrente->prenotazione->fasciaOraria,corrente->prenotazione->stato,corrente->prenotazione->caparra);
     }
 
-    corrente = corrente->successivo;
-}
+    corrente = corrente->successivo; // Passa alla prenotazione successiva nella lista
+    }
 }
 // Libera la memoria allocata per l'elenco dei clienti e le loro prenotazioni
 void liberaElencoClienti(ElencoClienti *elenco) {
