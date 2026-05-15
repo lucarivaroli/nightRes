@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <time.h> //al suo interno ci sono funzioni per gestire il tempo, come time() e localtime()
 #include "prenotazioni.h"
 #include "utils.h"
 
@@ -9,7 +9,7 @@ void inizializzaArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
     archivio->elementi = NULL;
     archivio->numeroElementi = 0;
     archivio->capacita = 0;
-    archivio->prossimoId = 1;
+    archivio->prossimoId = 1;// ID univoco per ogni prenotazione, incrementato ad ogni aggiunta
 }
 
 void espandiArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
@@ -27,8 +27,8 @@ void espandiArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
 Prenotazione *trovaPrenotazionePerId(ArchivioPrenotazioni *archivio, int id) {
     int i;
     for (i = 0; i < archivio->numeroElementi; i++) {
-        if (archivio->elementi[i]->id == id) {
-            return archivio->elementi[i];
+        if (archivio->elementi[i]->id == id) { // controlla se ce una prenotazione con id uguale a quello cercato
+            return archivio->elementi[i]; //restituisce la prenotazione trovata
         }
     }
     return NULL;
@@ -43,12 +43,14 @@ int codaVuota(CodaAttesa *coda) {
     return coda->inizio == NULL;
 }
 
+// Funzione per inserire un cliente nella coda di attesa.
+// creando un nuovo nodo e aggiornando i puntatori di inizio e fine della coda
 void inserisciInCoda(CodaAttesa *coda, Cliente *cliente, const char *fasciaOraria) {
-    NodoCoda *nuovoNodo = malloc(sizeof(NodoCoda));
+    NodoCoda *nuovoNodo = malloc(sizeof(NodoCoda));// crea un nuovo nodo per la coda di attesa
 
-    nuovoNodo->cliente = cliente;
-    strcpy(nuovoNodo->fasciaOraria, fasciaOraria);
-    nuovoNodo->successivo = NULL;
+    nuovoNodo->cliente = cliente; // assegna il cliente al nodo
+    strcpy(nuovoNodo->fasciaOraria, fasciaOraria); // copia la fascia oraria richiesta nel nodo
+    nuovoNodo->successivo = NULL; // il nuovo nodo sarà l'ultimo, quindi il successivo è NULL
 
     if (coda->fine == NULL) {
         coda->inizio = nuovoNodo;
@@ -59,8 +61,10 @@ void inserisciInCoda(CodaAttesa *coda, Cliente *cliente, const char *fasciaOrari
     }
 }
 
+// Funzione per estrarre un cliente dalla coda di attesa.
+// Rimuove il nodo in testa alla coda e restituisce un puntatore a quel nodo
 NodoCoda *estraiDallaCoda(CodaAttesa *coda) {
-    NodoCoda *temp;
+    NodoCoda *temp; // variabile temporanea per memorizzare il nodo estratto
 
     if (coda->inizio == NULL) {
         return NULL;
@@ -86,53 +90,56 @@ void visualizzaCodaAttesa(CodaAttesa *coda) {
         return;
     }
 
-    while (corrente != NULL) {
-        printf("Cliente ID:%d | Nome:%s | Fascia:%s\n",
-               corrente->cliente->id,
-               corrente->cliente->nome,
-               corrente->fasciaOraria);
-        corrente = corrente->successivo;
+    // Scorre la coda di attesa e stampa le informazioni di ogni cliente in attesa, inclusa la fascia oraria richiesta
+    while (corrente != NULL) { //continua finche ci sono nodi nella coda
+        printf("Cliente ID:%d | Nome:%s | Fascia:%s\n",corrente->cliente->id,corrente->cliente->nome,corrente->fasciaOraria);
+        corrente = corrente->successivo; // passa al nodo successivo nella coda
     }
 }
 
 int oraPerFascia(const char *fasciaOraria) {
+    //trasforma la fascia oraria in un'ora specifica per creare l'orario di inizio del turno
     if (strcmp(fasciaOraria, "apertura") == 0) {
-        return 22;
+        return 22;// La fascia "apertura" inizia alle 22:00
     }
     if (strcmp(fasciaOraria, "prime_ore") == 0) {
-        return 23;
+        return 23;// La fascia "prime_ore" inizia alle 23:00
     }
     return 1;
 }
 
 time_t creaOrarioTurno(const char *fasciaOraria) {
-    time_t adesso = time(NULL);
-    struct tm orario = *localtime(&adesso);
+    time_t adesso = time(NULL); //funzione della time.h che restituisce il tempo attuale in secondi dal 1 gennaio 1970
+    struct tm orario = *localtime(&adesso);// Converte il tempo attuale in una struttura tm in modo da poterlo modificare piu facilmente
+                                            // Imposta i minuti e i secondi a zero per creare un orario pulito basato sull'ora della fascia oraria
 
-    orario.tm_min = 0;
-    orario.tm_sec = 0;
-    orario.tm_hour = oraPerFascia(fasciaOraria);
+    orario.tm_min = 0; //azzera i minuti
+    orario.tm_sec = 0;//azzera i secondi
+    orario.tm_hour = oraPerFascia(fasciaOraria); //imposta l'ora in base alla fascia oraria
 
+    // Se la fascia oraria è "late_night" e l'ora attuale è già passata, aggiunge un giorno per indicare la notte successiva
     if (strcmp(fasciaOraria, "late_night") == 0 && localtime(&adesso)->tm_hour > 12) {
-        orario.tm_mday += 1;
+        orario.tm_mday += 1; 
     }
 
-    return mktime(&orario);
+    return mktime(&orario); //trasforma il valore in modo che il programma riesce a gestirlo
 }
 
+// Funzione per verificare se un tavolo è già occupato in una data fascia oraria.
 int tavoloOccupatoInFascia(ArchivioPrenotazioni *archivio, int idTavolo, const char *fasciaOraria) {
     int i;
 
-    for (i = 0; i < archivio->numeroElementi; i++) {
-        Prenotazione *prenotazione = archivio->elementi[i];
+    for (i = 0; i < archivio->numeroElementi; i++) { // Scorre tutte le prenotazioni nell'archivio
+        Prenotazione *prenotazione = archivio->elementi[i]; //prende una prenotazione alla volta
 
+        // Controlla se la prenotazione è per il tavolo specificato, nella fascia oraria richiesta, e se lo stato è "attiva" o "confermata"
         if (prenotazione->tavolo != NULL && prenotazione->tavolo->id == idTavolo && strcmp(prenotazione->fasciaOraria, fasciaOraria) == 0 &&
         (strcmp(prenotazione->stato, "attiva") == 0 ||strcmp(prenotazione->stato, "confermata") == 0)) {
-            return 1;
+            return 1; // Il tavolo è occupato in quella fascia oraria
         }
     }
 
-    return 0;
+    return 0; // Il tavolo è libero in quella fascia oraria
 }
 
 void creaPrenotazione(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco, CodaAttesa *coda) {
@@ -161,41 +168,45 @@ void creaPrenotazione(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
 
     printf("\n--- TAVOLI DISPONIBILI ---\n");
     for (i = 0; i < catalogo->numeroElementi; i++) {
-        Tavolo *corrente = catalogo->elementi[i];
+        Tavolo *corrente = catalogo->elementi[i]; //legge tutti i tavoli nell'elenco
 
-        if (corrente->attivo == 1 && !tavoloOccupatoInFascia(archivio, corrente->id, fasciaOraria)) {
-            printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Prezzo:%.2f\n",corrente->id, corrente->numeroTavolo, corrente->nomeTavolo,
-                   corrente->zona, corrente->prezzoMinimo);
+        if (corrente->attivo == 1 && !tavoloOccupatoInFascia(archivio, corrente->id, fasciaOraria)) { //! serve per invertire un valore logico
+            printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Prezzo:%.2f\n",corrente->id, corrente->numeroTavolo, corrente->nomeTavolo,corrente->zona, corrente->prezzoMinimo);
         }
     }
 
+    // Chiede all'utente di inserire l'ID del tavolo desiderato o 0 per essere inseriti in lista d'attesa
     printf("ID tavolo desiderato (0 per lista attesa): ");
     scanf("%d", &idTavolo);
     pulisciInput();
 
+    // Se l'utente ha scelto un tavolo specifico, cerca quel tavolo nel catalogo
     if (idTavolo != 0) {
         tavolo = trovaTavoloPerId(catalogo, idTavolo);
     }
 
+    // Se il tavolo non esiste, non è attivo, o è già occupato nella fascia oraria richiesta, inserisce il cliente in coda di attesa
     if (tavolo == NULL || tavolo->attivo == 0 || tavoloOccupatoInFascia(archivio, idTavolo, fasciaOraria)) {
         printf("Tavolo non disponibile. Cliente inserito in lista d'attesa.\n");
         inserisciInCoda(coda, cliente, fasciaOraria);
         return;
     }
 
+    //le parentesi servono per raggruppare tutte le operazioni di creazione della prenotazione in un unico blocco, rendendo il codice piu leggibile e organizzato
     {
-        Prenotazione *prenotazione = malloc(sizeof(Prenotazione));
+        Prenotazione *prenotazione = malloc(sizeof(Prenotazione)); //alloca dinamicamente memoria per una vuova prenotazione
 
-        prenotazione->id = archivio->prossimoId++;
-        prenotazione->tavolo = tavolo;
-        prenotazione->cliente = cliente;
-        strcpy(prenotazione->fasciaOraria, fasciaOraria);
-        prenotazione->caparra = tavolo->prezzoMinimo * 0.30f;
+        prenotazione->id = archivio->prossimoId++; //assegna un ID univoco alla prenotazione e incrementa il contatore per la prossima prenotazione
+        prenotazione->tavolo = tavolo; // associa il tavolo scelto alla prenotazione
+        prenotazione->cliente = cliente; // associa il cliente alla prenotazione
+        strcpy(prenotazione->fasciaOraria, fasciaOraria); //copia la fascia oraria scelta nella struttura della prenotazione
+        prenotazione->caparra = tavolo->prezzoMinimo * 0.30f; //calcola la caparra come il 30% del prezzo minimo del tavolo e la assegna alla prenotazione
         strcpy(prenotazione->stato, "attiva");
-        prenotazione->creazione = time(NULL);
-        prenotazione->inizioTurno = creaOrarioTurno(fasciaOraria);
-        prenotazione->scadenzaNoShow = prenotazione->inizioTurno + 30 * 60;
+        prenotazione->creazione = time(NULL); //assegna alla prenotazione il tempo attuale come momento di creazione
+        prenotazione->inizioTurno = creaOrarioTurno(fasciaOraria);//calcola l'orario dell'inizio turno e lo assegna alla prenotazione
+        prenotazione->scadenzaNoShow = prenotazione->inizioTurno + 30 * 60; //calcola la scadenza per il no-show come 30 minuti dopo l'inizio del turno e la assegna alla prenotazione
 
+        // Aggiunge la prenotazione all'archivio, espandendo l'archivio se necessario
         espandiArchivioPrenotazioni(archivio);
         archivio->elementi[archivio->numeroElementi++] = prenotazione;
 

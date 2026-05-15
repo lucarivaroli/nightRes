@@ -25,16 +25,16 @@ void espandiCatalogoTavoli(CatalogoTavoli *catalogo) {// Espande la capacità de
 // Trova un tavolo nel catalogo in base al suo ID
 Tavolo *trovaTavoloPerId(CatalogoTavoli *catalogo, int id) {
     int i;
-    for (i = 0; i < catalogo->numeroElementi; i++) {
-        if (catalogo->elementi[i]->id == id) {
-            return catalogo->elementi[i];
+    for (i = 0; i < catalogo->numeroElementi; i++) { // Scorre tutti i tavoli nel catalogo
+        if (catalogo->elementi[i]->id == id) { // Se trova un tavolo con l'ID corrispondente, lo restituisce
+            return catalogo->elementi[i]; // Restituisce il tavolo trovato
         }
     }
-    return NULL;
+    return NULL; // Se non trova nessun tavolo con l'ID specificato, restituisce NULL
 }
 // Aggiunge un nuovo tavolo al catalogo
 void aggiungiTavolo(CatalogoTavoli *catalogo) {
-    Tavolo *tavolo = malloc(sizeof(Tavolo));
+    Tavolo *tavolo = (Tavolo *)malloc(sizeof(Tavolo));
 
     tavolo->id = catalogo->prossimoId++;
     printf("Numero tavolo: ");
@@ -56,8 +56,8 @@ void aggiungiTavolo(CatalogoTavoli *catalogo) {
 
     tavolo->attivo = 1;
 
-    espandiCatalogoTavoli(catalogo);
-    catalogo->elementi[catalogo->numeroElementi++] = tavolo;
+    espandiCatalogoTavoli(catalogo); // assicura che ci sia spazio extra per il nuovo tavolo
+    catalogo->elementi[catalogo->numeroElementi++] = tavolo; // aggiunge il nuovo tavolo al catalogo e incrementa il numero di elementi
 
     printf("Tavolo aggiunto correttamente.\n");
 }
@@ -99,6 +99,7 @@ void modificaTavolo(CatalogoTavoli *catalogo) {
     printf("Tavolo modificato.\n");
 }
 // Rimuove un tavolo dal catalogo (disattivandolo)
+//il tavolo rimane nel catalogo ma viene marcato come disattivo, quindi con attivo=0
 void eliminaTavolo(CatalogoTavoli *catalogo) {
     int id;
     Tavolo *tavolo;
@@ -119,7 +120,7 @@ void eliminaTavolo(CatalogoTavoli *catalogo) {
 }
 // Permette di cercare tavoli in base a zona, capienza e prezzo minimo
 void cercaTavoli(CatalogoTavoli *catalogo) {
-    char zona[30];
+    char zona[30]; // Zona da cercare (VIP, lounge, dancefloor, esterno)
     int capienzaMinima;
     float prezzoMinimo;
     int i;
@@ -139,6 +140,7 @@ void cercaTavoli(CatalogoTavoli *catalogo) {
     for (i = 0; i < catalogo->numeroElementi; i++) {
         Tavolo *tavolo = catalogo->elementi[i];
 
+        // Controlla se il tavolo è attivo, se la zona corrisponde a quella cercata, se la capienza è sufficiente e se il prezzo minimo è soddisfatto
         if (tavolo->attivo == 1 && strstr(tavolo->zona, zona) != NULL && tavolo->capienza >= capienzaMinima && tavolo->prezzoMinimo >= prezzoMinimo) {
             printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f\n",tavolo->id, tavolo->numeroTavolo, tavolo->nomeTavolo,tavolo->zona, tavolo->capienza, tavolo->prezzoMinimo);
         }
@@ -151,9 +153,9 @@ void visualizzaTavoli(CatalogoTavoli *catalogo) {
     ordinaTavoliPerNumero(catalogo);
 
     printf("\n--- TAVOLI ---\n");
-    for (i = 0; i < catalogo->numeroElementi; i++) {
+    for (i = 0; i < catalogo->numeroElementi; i++) { // Scorre tutti i tavoli nel catalogo
         Tavolo *tavolo = catalogo->elementi[i];
-        if (tavolo->attivo == 1) {
+        if (tavolo->attivo == 1) { // Se il tavolo è attivo, stampa le sue informazioni con l'indicazione "Attivo"
         printf("ID:%d | Numero:%d | Nome:%s | Zona:%s | Capienza:%d | Prezzo:%.2f | Attivo\n",
             tavolo->id,
             tavolo->numeroTavolo,
@@ -177,7 +179,6 @@ void visualizzaTavoli(CatalogoTavoli *catalogo) {
 
 
 // Libera la memoria allocata per il catalogo dei tavoli
-
 void liberaCatalogoTavoli(CatalogoTavoli *catalogo) {
     int i;
 
@@ -195,7 +196,7 @@ void visualizzaMappaTavoli(CatalogoTavoli *catalogo) {
 
     printf("\n--- ZONA VIP ---\n");
     for (i = 0; i < catalogo->numeroElementi; i++) {
-        Tavolo *tavolo = catalogo->elementi[i];
+        Tavolo *tavolo = catalogo->elementi[i]; 
 
         if (strcmp(tavolo->zona, "VIP") == 0) {
             if (tavolo->attivo == 1) {
