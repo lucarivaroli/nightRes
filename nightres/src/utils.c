@@ -9,6 +9,7 @@ void pulisciInput() {
     while ((carattere = getchar()) != '\n' && carattere != EOF) {
     }
 }
+
 //Stampa la data e l'ora in un formato leggibile
 void stampaDataOra(time_t valoreTempo) {
     char buffer[64];
@@ -16,6 +17,7 @@ void stampaDataOra(time_t valoreTempo) {
     strftime(buffer, sizeof(buffer), "%d/%m/%Y %H:%M", infoTempo); // Formato: giorno/mese/anno ora:minuti
     printf("%s", buffer);
 }
+
 // Stampa una barra di progresso testuale proporzionale al valore rispetto al massimo
 void stampaBarra(int valore, int massimo) { 
     int numeroBarre;                        
@@ -32,6 +34,7 @@ void stampaBarra(int valore, int massimo) {
     }
     printf(" (%d)", valore);
 }
+
 // Ordina i tavoli in base al numero del tavolo usando il bubble sort
 void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
     int i, j;
@@ -48,6 +51,7 @@ void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
         }
     }
 }
+
 // Mostra statistiche dettagliate sui tavoli, clienti e prenotazioni
 void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, ArchivioPrenotazioni *archivio) {
     int i, j;

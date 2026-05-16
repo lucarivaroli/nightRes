@@ -5,6 +5,7 @@
 #include "prenotazioni.h"
 #include "utils.h"
 
+// Carica le prenotazioni dal file CSV e le associa ai tavoli e clienti corrispondenti
 void inizializzaArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
     archivio->elementi = NULL;
     archivio->numeroElementi = 0;
@@ -12,6 +13,7 @@ void inizializzaArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
     archivio->prossimoId = 1;// ID univoco per ogni prenotazione, incrementato ad ogni aggiunta
 }
 
+// Espande la capacità dell'archivio se necessario
 void espandiArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
     if (archivio->numeroElementi >= archivio->capacita) {
         if (archivio->capacita == 0) {
@@ -24,6 +26,7 @@ void espandiArchivioPrenotazioni(ArchivioPrenotazioni *archivio) {
     }
 }
 
+// Trova una prenotazione nell'archivio in base al suo ID
 Prenotazione *trovaPrenotazionePerId(ArchivioPrenotazioni *archivio, int id) {
     int i;
     for (i = 0; i < archivio->numeroElementi; i++) {
@@ -33,6 +36,7 @@ Prenotazione *trovaPrenotazionePerId(ArchivioPrenotazioni *archivio, int id) {
     }
     return NULL;
 }
+
 
 void inizializzaCodaAttesa(CodaAttesa *coda) {
     coda->inizio = NULL;
@@ -52,12 +56,13 @@ void inserisciInCoda(CodaAttesa *coda, Cliente *cliente, const char *fasciaOrari
     strcpy(nuovoNodo->fasciaOraria, fasciaOraria); // copia la fascia oraria richiesta nel nodo
     nuovoNodo->successivo = NULL; // il nuovo nodo sarà l'ultimo, quindi il successivo è NULL
 
+    // Se la coda è vuota, il nuovo nodo diventa sia l'inizio che la fine della coda
     if (coda->fine == NULL) {
         coda->inizio = nuovoNodo;
-        coda->fine = nuovoNodo;
+        coda->fine = nuovoNodo;// Se la coda non è vuota, aggiunge il nuovo nodo alla fine della coda e aggiorna il puntatore di fine
     } else {
-        coda->fine->successivo = nuovoNodo;
-        coda->fine = nuovoNodo;
+        coda->fine->successivo = nuovoNodo;// collega il nuovo nodo alla fine della coda
+        coda->fine = nuovoNodo;// aggiorna il puntatore di fine per il nuovo nodo
     }
 }
 
@@ -69,6 +74,7 @@ NodoCoda *estraiDallaCoda(CodaAttesa *coda) {
     if (coda->inizio == NULL) {
         return NULL;
     }
+
 
     temp = coda->inizio;
     coda->inizio = coda->inizio->successivo;

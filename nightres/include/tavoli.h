@@ -23,7 +23,7 @@ typedef struct {
  * di elementi, la capacità attuale e l'ID successivo.
  */
 typedef struct {
-    Tavolo **elementi;
+    Tavolo **elementi;// Array dinamico di puntatori a Tavolo
     int numeroElementi;
     int capacita;
     int prossimoId;
