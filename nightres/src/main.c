@@ -5,7 +5,7 @@
 #include "file_io.h"
 #include "utils.h"
 
-
+//gestisce il menu per la gestione dei tavoli
 void menuTavoli(CatalogoTavoli *catalogo) {
     int scelta;
 
@@ -44,6 +44,7 @@ void menuTavoli(CatalogoTavoli *catalogo) {
         }
     } while (scelta != 0);
 }
+
 // Gestisce il menu per la gestione dei clienti
 void menuClienti(ElencoClienti *elenco) {
     int scelta;
@@ -75,6 +76,7 @@ void menuClienti(ElencoClienti *elenco) {
         }
     } while (scelta != 0);
 }
+
 // Gestisce il menu per la gestione delle prenotazioni
 void menuPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, ElencoClienti *elenco, CodaAttesa *coda) {
     int scelta;
@@ -111,19 +113,23 @@ void menuPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
         }
     } while (scelta != 0);
 }
-// Funzione principale del programma
+
+
 int main() {
-    CatalogoTavoli catalogoTavoli;
+    CatalogoTavoli catalogoTavoli; 
     ElencoClienti elencoClienti;
     ArchivioPrenotazioni archivioPrenotazioni;
-    CodaAttesa codaAttesa;
+    CodaAttesa codaAttesa; //coda di attesa FIFO
+    
     int scelta;
 
+    //servono per prepare le strutture dati
     inizializzaCatalogoTavoli(&catalogoTavoli);
     inizializzaElencoClienti(&elencoClienti);
     inizializzaArchivioPrenotazioni(&archivioPrenotazioni);
     inizializzaCodaAttesa(&codaAttesa);
 
+    //legge i file csv e li ricostruisce in memoria
     caricaTavoli(&catalogoTavoli);
     caricaClienti(&elencoClienti);
     caricaPrenotazioni(&archivioPrenotazioni, &catalogoTavoli, &elencoClienti);

@@ -26,13 +26,12 @@ void stampaBarra(int valore, int massimo) {
     if (massimo <= 0) {
         massimo = 1;
     }
-
-    numeroBarre = (valore * 20) / massimo;
+    numeroBarre = (valore * 20) / massimo; //calcola il numero di barre da stampare con massimo 20 caratterri
 
     for (i = 0; i < numeroBarre; i++) {
         printf("|");
     }
-    printf(" (%d)", valore);
+    printf(" (%d)", valore); //aggiunge il numero vicino alla barra
 }
 
 // Ordina i tavoli in base al numero del tavolo usando il bubble sort
@@ -43,6 +42,7 @@ void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
     //bubble sort per ordinare i tavoli in base al numero del tavolo
     for (i = 0; i < catalogo->numeroElementi - 1; i++) {
         for (j = 0; j < catalogo->numeroElementi - i - 1; j++) {
+            //controlla se il numero e maggiore del successivo
             if (catalogo->elementi[j]->numeroTavolo > catalogo->elementi[j + 1]->numeroTavolo) {
                 temp = catalogo->elementi[j];
                 catalogo->elementi[j] = catalogo->elementi[j + 1];
@@ -55,46 +55,51 @@ void ordinaTavoliPerNumero(CatalogoTavoli *catalogo) {
 // Mostra statistiche dettagliate sui tavoli, clienti e prenotazioni
 void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, ArchivioPrenotazioni *archivio) {
     int i, j;
-    int massimoPrenotazioniTavolo = 0; // non ce nessun tavolo prenotato
+    int massimoPrenotazioniTavolo = 0; 
     int idTavoloTop = -1; // valore speciale perche non ce nessun tavolo prenotato
-    int massimoPrenotazioniCliente = 0; // non ce nessun cliente con prenotazioni
-    int idClienteTop = -1;// valore speciale perche non ce nessun cliente con prenotazioni
+    int massimoPrenotazioniCliente = 0; 
+    int idClienteTop = -1;
     int numeroNoShow = 0; // contatore per il numero di no-show
+    
     int richiesteVip = 0, richiesteDancefloor = 0, richiesteLounge = 0, richiesteEsterno = 0; // contatori per le richieste di zona
+    
     float incassoTotale = 0.0f; // incasso totale da tutte le prenotazioni
 
-    for (i = 0; i < catalogo->numeroElementi; i++) { // continua fino a quando non ha controllato tutti i tavoli
+    //prenotazioni per ogni tavolo
+    for (i = 0; i < catalogo->numeroElementi; i++) { // prende un tavolo alla volta
         int conteggio = 0;
-        for (j = 0; j < archivio->numeroElementi; j++) { // continua fino a quando non ha controllato tutte le prenotazioni
+        for (j = 0; j < archivio->numeroElementi; j++) { // controlla per ogni tavolo quante prenotazioni ci sono associate 
             if (archivio->elementi[j]->tavolo != NULL && archivio->elementi[j]->tavolo->id == catalogo->elementi[i]->id) {
                 // se la prenotazione è associata al tavolo corrente, incrementa il conteggio
                 conteggio++;
             }
         }
+
+        //salva id del tavolo piu prenotato in idtavolotop
         if (conteggio > massimoPrenotazioniTavolo) { // se il conteggio per questo tavolo è maggiore del massimo attuale, aggiorna il massimo e l'id del tavolo top
             massimoPrenotazioniTavolo = conteggio; 
             idTavoloTop = catalogo->elementi[i]->id; // aggiorna l'id del tavolo più prenotato
         }
     }
 
-    
-    // Questo ciclo for itera attraverso tutti i clienti nell'elenco dei clienti. 
-    //Per ogni cliente, conta quante prenotazioni ha effettuato scorrendo l'elenco delle prenotazioni. 
-    //Se il numero di prenotazioni per un cliente supera il massimo attuale, aggiorna il massimo e memorizza l'id del cliente con più prenotazioni.
-
+    // prenotazioni per ogni cliente 
     for (i = 0; i < elenco->numeroElementi; i++) { 
-        int conteggio = 0;
-        NodoPrenotazione *corrente = elenco->elementi[i]->prenotazioni;
+        int conteggio = 0;//prenotazioni per il cliente corrente
+
+        NodoPrenotazione *corrente = elenco->elementi[i]->prenotazioni;//prende la testa delle prenotazioni per quel cliente
         while (corrente != NULL) {
-            conteggio++;
-            corrente = corrente->successivo;
+            conteggio++; //aumenta il numero di prenotazioni del cliente
+            corrente = corrente->successivo; //sposta il puntatore al nodo successivo
         }
+
+        //se il c del c e maggiore al massimo salva id del cliente con piu prenotazioni
         if (conteggio > massimoPrenotazioniCliente) {
             massimoPrenotazioniCliente = conteggio;
             idClienteTop = elenco->elementi[i]->id;
         }
     }
 
+    //calcolare statistiche principali sulle prenotazioni
     for (i = 0; i < archivio->numeroElementi; i++) {
         Prenotazione *prenotazione = archivio->elementi[i];
 
@@ -113,10 +118,11 @@ void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, Archivio
                 richiesteEsterno++;
             }
 
-
+            //controlla lo stato della prenotazione
             // Se la prenotazione è attiva, confermata o no-show, aggiunge il prezzo minimo del tavolo all'incasso totale
             if (strcmp(prenotazione->stato, "attiva") == 0 || strcmp(prenotazione->stato, "confermata") == 0 ||strcmp(prenotazione->stato, "no_show") == 0) {
                 incassoTotale += prenotazione->tavolo->prezzoMinimo;
+                //anche no-show perche il il cliente tiene occupato il tavolo
             }
         }
     }
@@ -133,12 +139,19 @@ void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, Archivio
     printf("Tasso di no-show: %d/%d\n", numeroNoShow, archivio->numeroElementi);
 
     {
-        int massimoZona = richiesteVip;
+        int massimoZona;
+        massimoZona = richiesteVip;// serve per trovare la zona con il massimo numero di richieste
 
-        // Determina quale zona è la più richiesta confrontando le richieste per ciascuna zona e aggiornando il massimoZona di conseguenza
-        if (richiesteDancefloor > massimoZona) massimoZona = richiesteDancefloor;
-        if (richiesteLounge > massimoZona) massimoZona = richiesteLounge;
-        if (richiesteEsterno > massimoZona) massimoZona = richiesteEsterno;
+        // trova la zona della discoteca piu richiesta
+        if (richiesteDancefloor > massimoZona){
+            massimoZona = richiesteDancefloor;
+        }
+        if (richiesteLounge > massimoZona){
+            massimoZona = richiesteLounge;
+        } 
+        if (richiesteEsterno > massimoZona){
+            massimoZona = richiesteEsterno;
+        } 
 
         printf("Zona piu' richiesta:\n");
         printf("VIP        "); 
@@ -155,6 +168,7 @@ void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, Archivio
         printf("\n");
     }
 
+    //incasso medio per serata
     if (archivio->numeroElementi > 0) {
         printf("Incasso medio per serata: %.2f\n", incassoTotale / archivio->numeroElementi);
     } else {
