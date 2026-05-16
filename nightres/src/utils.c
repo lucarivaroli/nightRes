@@ -127,7 +127,9 @@ void mostraStatistiche(CatalogoTavoli *catalogo, ElencoClienti *elenco, Archivio
         }
     }
 
+    printf("\033[1;31m");
     printf("\n--- STATISTICHE ---\n");
+    printf("\033[0m");
     printf("Tavolo piu' prenotato: %d con ", idTavoloTop);
     stampaBarra(massimoPrenotazioniTavolo, massimoPrenotazioniTavolo);
     printf("\n");

@@ -10,7 +10,9 @@ void menuTavoli(CatalogoTavoli *catalogo) {
     int scelta;
 
     do {
+        printf("\033[1;31m");
         printf("\n--- MENU TAVOLI ---\n");
+        printf("\033[0m");
         printf("1. Aggiungi tavolo\n");
         printf("2. Modifica tavolo\n");
         printf("3. Elimina tavolo\n");
@@ -50,7 +52,9 @@ void menuClienti(ElencoClienti *elenco) {
     int scelta;
 
     do {
-        printf("\n--- MENU CLIENTI ---\n");
+        printf("\033[1;31m");
+        printf("\n--- MENU CLIENTI  ---\n");
+        printf("\033[0m");
         printf("1. Registra cliente\n");
         printf("2. Elimina cliente\n");
         printf("3. Visualizza clienti\n");
@@ -82,7 +86,9 @@ void menuPrenotazioni(ArchivioPrenotazioni *archivio, CatalogoTavoli *catalogo, 
     int scelta;
 
     do {
+        printf("\033[1;31m");
         printf("\n--- MENU PRENOTAZIONI ---\n");
+        printf("\033[0m");
         printf("1. Crea prenotazione\n");
         printf("2. Cancella prenotazione\n");
         printf("3. Visualizza prenotazioni serata\n");
@@ -135,9 +141,11 @@ int main() {
     caricaPrenotazioni(&archivioPrenotazioni, &catalogoTavoli, &elencoClienti);
 
     do {
-        printf("\n=============================\n");
-        printf("         NIGHTRES\n");
-        printf("=============================\n");
+        printf("\033[1;31m");
+        printf("====================================\n");
+        printf("   🌙 NIGHTRES DISCO SYSTEM 🌙\n");
+        printf("====================================\n");
+        printf("\033[0m");
         printf("1. Gestione tavoli\n");
         printf("2. Gestione clienti\n");
         printf("3. Gestione prenotazioni\n");
