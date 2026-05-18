@@ -4,7 +4,7 @@
 #define MAX_STR 100
 
 
-/** Rappresenta un tavolo del ristorante.
+/** Rappresenta un tavolo della discoteca.
  * Contiene informazioni identificative, nome, zona, capienza,
  * prezzo minimo e stato di attivazione.
  */

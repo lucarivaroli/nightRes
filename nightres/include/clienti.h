@@ -14,7 +14,7 @@ typedef struct NodoPrenotazione {
     struct NodoPrenotazione *successivo;
 } NodoPrenotazione;
 
-/** Rappresenta un cliente del ristorante.
+/** Rappresenta un cliente della discoteca.
  * Contiene informazioni anagrafiche, livello di fedeltà e la lista
  * delle prenotazioni associate al cliente.
  */
